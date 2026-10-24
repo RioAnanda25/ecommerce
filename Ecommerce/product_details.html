@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Produk | Sistem E-Commerce</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="navbar" style="display: flex; align-items: center;">
+            <div class="logo">
+                <a href="index.html"><img src="images/online-shop.png" alt="logo" width="65px"></a>
+            </div>
+            <nav>
+                <ul id="MenuItems" style="margin: 0; padding: 0;">
+                    <li><a href="index.html">Beranda</a></li>
+                    <li><a href="products.html">Produk & Stok</a></li>
+                    <li><a href="account.html">Akun</a></li>
+                </ul>
+            </nav>
+            <a href="cart.html"><img src="images/cart.png" width="30px" height="30px" alt="Keranjang"></a>
+            <img src="images/menu.png" class="menu-icon" onclick="menutoggle()" alt="Menu Toggle">
+        </div>
+    </div>
+
+    <!-- Single Products -->
+    <div class="small-container single-product">
+        <div class="row">
+            <div class="col-2">
+                <img src="images/gallery-1.jpg" width="100%" id="ProductImg" alt="Gambar Utama Produk">
+
+                <div class="small-img-row">
+                    <div class="small-img-col">
+                        <img src="images/gallery-1.jpg" width="100%" class="small-img" alt="Galeri 1">
+                    </div>
+                    <div class="small-img-col">
+                        <img src="images/gallery-2.jpg" width="100%" class="small-img" alt="Galeri 2">
+                    </div>
+                    <div class="small-img-col">
+                        <img src="images/gallery-3.jpg" width="100%" class="small-img" alt="Galeri 3">
+                    </div>
+                    <div class="small-img-col">
+                        <img src="images/gallery-4.jpg" width="100%" class="small-img" alt="Galeri 4">
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-2">
+                <p>Beranda / Kaos</p>
+                <h1>Kaos Printed Red</h1>
+                <h4>Rp 150.000</h4>
+                <select>
+                    <option>Pilih Ukuran</option>
+                    <option>XXL</option>
+                    <option>XL</option>
+                    <option>L</option>
+                    <option>M</option>
+                    <option>S</option>
+                </select>
+                <input type="number" value="1">
+                <a href="cart.html" class="btn">Tambah ke Keranjang</a>
+
+                <h3>Detail Produk <i class="fa fa-indent"></i></h3>
+                <br>
+                <p>Tingkatkan gaya pakaian musim panas Anda dengan Kaos Puma Men's Active. Padukan dengan celana pendek untuk olahraga pagi Anda atau celana denim untuk bersantai di sore hari bersama teman-teman.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Title -->
+    <div class="small-container">
+        <div class="row row-2">
+            <h2>Produk Terkait</h2>
+            <p><a href="products.html" style="color: inherit; text-decoration: none;">Lihat Lainnya</a></p>
+        </div>
+    </div>
+
+    <!-- Products -->
+    <div class="small-container">
+        <div class="row">
+            <div class="col-4">
+                <img src="images/product-9.jpg" alt="Jam Tangan Sport">
+                <h4>Jam Tangan Sport Roadster</h4>
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-o"></i>
+                </div>
+                <p>Rp 210.000</p>
+            </div>
+            <div class="col-4">
+                <img src="images/product-10.jpg" alt="Sepatu Running Black Red">
+                <h4>Sepatu Running Black Red</h4>
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                </div>
+                <p>Rp 530.000</p>
+            </div>
+            <div class="col-4">
+                <img src="images/product-11.jpg" alt="Sepatu Casual Grey">
+                <h4>Sepatu Casual Grey</h4>
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-o"></i>
+                    <i class="fa fa-star-o"></i>
+                </div>
+                <p>Rp 310.000</p>
+            </div>
+            <div class="col-4">
+                <img src="images/product-12.jpg" alt="Celana Jogger Black">
+                <h4>Celana Jogger Black Nike</h4>
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-o"></i>
+                </div>
+                <p>Rp 175.000</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="footer-col-1">
+                    <h3>Unduh Aplikasi</h3>
+                    <p>Tersedia untuk smartphone Android dan iOS.</p>
+                    <div class="app-logo">
+                        <img src="images/play-store.png" alt="Play Store">
+                        <img src="images/app-store.png" alt="App Store">
+                    </div>
+                </div>
+                <div class="footer-col-2">
+                    <img src="images/online-shop.png" alt="Logo White">
+                    <p>Sistem E-Commerce Terpercaya untuk Kebutuhan Belanja Anda.</p>
+                </div>
+                <div class="footer-col-3">
+                    <h3>Layanan</h3>
+                    <ul>
+                        <li>Produk & Stok</li>
+                        <li>Shopping Cart</li>
+                        <li>Konfirmasi Pembayaran</li>
+                        <li>Lacak Resi</li>
+                    </ul>
+                </div>
+                <div class="footer-col-4">
+                    <h3>Ikuti Kami</h3>
+                    <ul>
+                        <li>Facebook</li>
+                        <li>Instagram</li>
+                        <li>Twitter</li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <p class="copyright">Copyright 2026 - E-Commerce System</p>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        var MenuItems = document.getElementById("MenuItems");
+        MenuItems.style.maxHeight = "0px";
+        function menutoggle() {
+            if (MenuItems.style.maxHeight == "0px") {
+                MenuItems.style.maxHeight = "200px";
+            }
+            else {
+                MenuItems.style.maxHeight = "0px";
+            }
+        }
+    </script>
+
+    <!-- Product Gallery JavaScript -->
+    <script>
+        var ProductImg = document.getElementById("ProductImg");
+        var SmallImg = document.getElementsByClassName("small-img");
+
+        SmallImg[0].onclick = function () {
+            ProductImg.src = SmallImg[0].src;
+        }
+        SmallImg[1].onclick = function () {
+            ProductImg.src = SmallImg[1].src;
+        }
+        SmallImg[2].onclick = function () {
+            ProductImg.src = SmallImg[2].src;
+        }
+        SmallImg[3].onclick = function () {
+            ProductImg.src = SmallImg[3].src;
+        }
+    </script>
+</body>
+
+</html>
