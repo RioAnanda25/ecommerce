@@ -37,25 +37,34 @@
                     <img src="images/image1.png" width="100%" alt="Banner Akun">
                 </div>
                 <div class="col-2">
-                    <div class="form-container">
+                    <!-- Form Container (Tampil Saat Belum Login) -->
+                    <div class="form-container" id="authContainer">
                         <div class="form-btn">
                             <span onclick="login()">Masuk</span>
                             <span onclick="register()">Daftar</span>
                             <hr id="Indicator">
                         </div>
                         <form id="LoginForm" onsubmit="handleLogin(event)">
-                            <input type="text" id="loginUser" placeholder="Nama Pengguna" required>
+                            <input type="text" id="loginUser" placeholder="Nama Pengguna atau Email" required>
                             <input type="password" id="loginPass" placeholder="Kata Sandi" required>
                             <button type="submit" class="btn">Masuk</button>
-                            <a href="">Lupa Kata Sandi?</a>
+                            <a href="javascript:void(0);" onclick="handleForgotPassword()">Lupa Kata Sandi?</a>
                         </form>
 
                         <form id="RegForm" onsubmit="handleRegister(event)">
-                            <input type="text" placeholder="Nama Pengguna" required>
-                            <input type="email" placeholder="Email" required>
-                            <input type="password" placeholder="Kata Sandi" required>
+                            <input type="text" id="regUser" placeholder="Nama Pengguna" required>
+                            <input type="email" id="regEmail" placeholder="Email" required>
+                            <input type="password" id="regPass" placeholder="Kata Sandi" required>
                             <button type="submit" class="btn">Daftar</button>
                         </form>
+                    </div>
+
+                    <!-- Profile & Logout Container (Tampil Saat Sudah Login) -->
+                    <div class="form-container" id="loggedInContainer" style="display: none; text-align: center; padding: 40px 20px;">
+                        <i class="fa fa-user-circle" style="font-size: 70px; color: #ff523b; margin-bottom: 15px;"></i>
+                        <h2 style="margin-bottom: 5px;">Halo, <span id="displayUsername">Pengguna</span>!</h2>
+                        <p style="color: #555; margin-bottom: 25px;">Anda telah berhasil masuk ke akun Anda.</p>
+                        <button onclick="handleLogout()" class="btn" style="background: #ff523b; border: none; cursor: pointer;">Keluar (Logout)</button>
                     </div>
                 </div>
             </div>
@@ -101,7 +110,7 @@
         </div>
     </div>
 
-    <!-- JavaScript -->
+    <!-- JavaScript Navigation -->
     <script>
         var MenuItems = document.getElementById("MenuItems");
         MenuItems.style.maxHeight = "0px";
@@ -134,35 +143,151 @@
         }
     </script>
 
-    <!-- JavaScript Handling Login & Registration (Role & Password Check) -->
+    <!-- JavaScript Handling Login, Registration, Password Reset & Logout State -->
     <script>
-        // Hapus status login lama saat halaman akun dimuat agar default tidak langsung tersimpan login
-        localStorage.removeItem("userRole");
+        // Cek Status Login saat Halaman Dimuat
+        window.addEventListener("DOMContentLoaded", checkLoginState);
 
+        function checkLoginState() {
+            const userRole = localStorage.getItem("userRole");
+            const currentUser = localStorage.getItem("currentUser");
+            const authContainer = document.getElementById("authContainer");
+            const loggedInContainer = document.getElementById("loggedInContainer");
+            const displayUsername = document.getElementById("displayUsername");
+
+            if (userRole && currentUser) {
+                // Tampilkan container logout jika pengguna sudah login
+                authContainer.style.display = "none";
+                loggedInContainer.style.display = "block";
+                displayUsername.textContent = currentUser;
+            } else {
+                // Tampilkan form auth jika belum login
+                authContainer.style.display = "block";
+                loggedInContainer.style.display = "none";
+            }
+        }
+
+        // Fungsi pendaftaran akun baru
+        function handleRegister(e) {
+            e.preventDefault();
+            const username = document.getElementById("regUser").value.trim();
+            const email = document.getElementById("regEmail").value.trim().toLowerCase();
+            const password = document.getElementById("regPass").value.trim();
+
+            // Validasi format email sederhana
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert("Format email tidak valid! Harap masukkan alamat email yang benar.");
+                return;
+            }
+
+            // Ambil daftar pengguna yang tersimpan di localStorage
+            let users = JSON.parse(localStorage.getItem("registeredUsers")) || [];
+
+            // Cek apakah username sudah terdaftar
+            const usernameExists = users.some(u => u.username.toLowerCase() === username.toLowerCase());
+            if (usernameExists || username.toLowerCase() === "admin") {
+                alert("Nama pengguna sudah digunakan! Silakan gunakan nama pengguna lain.");
+                return;
+            }
+
+            // Cek apakah email sudah terdaftar
+            const emailExists = users.some(u => u.email.toLowerCase() === email);
+            if (emailExists) {
+                alert("Alamat email sudah terdaftar! Silakan gunakan email lain atau masuk dengan akun tersebut.");
+                return;
+            }
+
+            // Simpan akun baru
+            users.push({ username, email, password });
+            localStorage.setItem("registeredUsers", JSON.stringify(users));
+
+            alert("Pendaftaran berhasil! Silakan masuk menggunakan akun Anda.");
+            document.getElementById("RegForm").reset();
+            login();
+        }
+
+        // Fungsi otentikasi masuk
         function handleLogin(e) {
             e.preventDefault();
-            const username = document.getElementById("loginUser").value.trim();
+            const loginInput = document.getElementById("loginUser").value.trim().toLowerCase();
             const password = document.getElementById("loginPass").value.trim();
 
-            if (username === "admin") {
+            // Cek Login khusus Admin
+            if (loginInput === "admin") {
                 if (password === "admin") {
                     localStorage.setItem("userRole", "admin");
+                    localStorage.setItem("currentUser", "Admin");
                     alert("Login berhasil sebagai Admin!");
                     window.location.href = "admin.html";
                 } else {
                     alert("Kata sandi salah! Silakan periksa kembali kata sandi Anda.");
                 }
+                return;
+            }
+
+            // Ambil data akun dari localStorage
+            let users = JSON.parse(localStorage.getItem("registeredUsers")) || [];
+            
+            // Cari pengguna berdasarkan Nama Pengguna atau Email
+            const foundUser = users.find(u => u.username.toLowerCase() === loginInput || u.email.toLowerCase() === loginInput);
+
+            if (foundUser) {
+                // Verifikasi Kata Sandi
+                if (foundUser.password === password) {
+                    localStorage.setItem("userRole", "customer");
+                    localStorage.setItem("currentUser", foundUser.username);
+                    alert("Login berhasil sebagai Pelanggan!");
+                    checkLoginState();
+                } else {
+                    alert("Kata sandi salah! Silakan periksa kembali kata sandi Anda.");
+                }
             } else {
-                localStorage.setItem("userRole", "customer");
-                alert("Login berhasil sebagai Pelanggan!");
-                window.location.href = "index.html";
+                alert("Nama pengguna atau email tidak ditemukan! Silakan daftar terlebih dahulu.");
             }
         }
 
-        function handleRegister(e) {
-            e.preventDefault();
-            alert("Pendaftaran berhasil! Silakan masuk menggunakan akun Anda.");
-            login();
+        // Fungsi Lupa Kata Sandi Sederhana
+        function handleForgotPassword() {
+            const inputUserOrEmail = prompt("Masukkan Nama Pengguna atau Alamat Email Anda:");
+            if (!inputUserOrEmail) return;
+
+            const cleanInput = inputUserOrEmail.trim().toLowerCase();
+            
+            if (cleanInput === "admin") {
+                alert("Kata sandi untuk akun Admin tidak dapat diubah melalui fitur ini.");
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem("registeredUsers")) || [];
+            
+            // Cari akun berdasarkan nama pengguna atau email
+            const userIndex = users.findIndex(u => 
+                u.username.toLowerCase() === cleanInput || u.email.toLowerCase() === cleanInput
+            );
+
+            if (userIndex !== -1) {
+                const newPassword = prompt(`Akun (${users[userIndex].username}) ditemukan. Masukkan kata sandi baru Anda:`);
+                if (newPassword && newPassword.trim() !== "") {
+                    users[userIndex].password = newPassword.trim();
+                    localStorage.setItem("registeredUsers", JSON.stringify(users));
+                    alert("Kata sandi berhasil diperbarui! Silakan masuk menggunakan kata sandi baru Anda.");
+                } else {
+                    alert("Pembaruan kata sandi dibatalkan.");
+                }
+            } else {
+                alert("Akun tidak ditemukan! Silakan periksa kembali Nama Pengguna atau Email Anda.");
+            }
+        }
+
+        // Fungsi Logout
+        function handleLogout() {
+            if (confirm("Apakah Anda yakin ingin keluar dari akun?")) {
+                localStorage.removeItem("userRole");
+                localStorage.removeItem("currentUser");
+                alert("Anda telah berhasil keluar.");
+                checkLoginState();
+            }
         }
     </script>
 

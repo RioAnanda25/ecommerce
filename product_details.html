@@ -55,7 +55,9 @@
                 <p id="productCategory">Beranda / Kaos</p>
                 <h1 id="productTitle">Kaos Printed Red</h1>
                 <h4 id="productPrice">Rp 150.000</h4>
-                <select>
+                
+                <!-- ID Ditambahkan pada tag select agar dapat diubah via JavaScript -->
+                <select id="sizeSelect">
                     <option>Pilih Ukuran</option>
                     <option>XXL</option>
                     <option>XL</option>
@@ -63,6 +65,7 @@
                     <option>M</option>
                     <option>S</option>
                 </select>
+
                 <input type="number" id="productQuantity" value="1" min="1">
                 <a href="javascript:void(0);" onclick="addToCartAuth()" id="addToCartBtn" class="btn">Tambah ke Keranjang</a>
 
@@ -222,6 +225,36 @@
 
             // Update Gambar Utama
             document.getElementById("ProductImg").src = item.img;
+
+            // Penyesuaian Ukuran Berdasarkan Kategori Produk
+            const sizeSelect = document.getElementById("sizeSelect");
+            if (sizeSelect) {
+                if (item.category === "Sepatu") {
+                    sizeSelect.style.display = "inline-block";
+                    sizeSelect.innerHTML = `
+                        <option>Pilih Ukuran Sepatu</option>
+                        <option>39</option>
+                        <option>40</option>
+                        <option>41</option>
+                        <option>42</option>
+                        <option>43</option>
+                        <option>44</option>
+                    `;
+                } else if (item.category === "Pakaian") {
+                    sizeSelect.style.display = "inline-block";
+                    sizeSelect.innerHTML = `
+                        <option>Pilih Ukuran Pakaian</option>
+                        <option>XXL</option>
+                        <option>XL</option>
+                        <option>L</option>
+                        <option>M</option>
+                        <option>S</option>
+                    `;
+                } else {
+                    // Sembunyikan pilihan ukuran untuk Aksesoris (seperti Jam Tangan)
+                    sizeSelect.style.display = "none";
+                }
+            }
 
             // Sembunyikan galeri kecil jika produk bukan Kaos Printed Red (id != 1)
             const smallImgRow = document.querySelector(".small-img-row");
