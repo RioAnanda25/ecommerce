@@ -8,6 +8,38 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        /* Modal Popup Ulasan & Rating */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 25px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .star-rating {
+            font-size: 30px;
+            color: #ccc;
+            cursor: pointer;
+            margin: 15px 0;
+        }
+        .star-rating .fa-star.active {
+            color: #ff523b;
+        }
+    </style>
 </head>
 
 <body>
@@ -88,6 +120,28 @@
         </div>
     </div>
 
+    <!-- Modal Form Ulasan & Rating Pelanggan (Muncul Otomatis Setelah Bayar) -->
+    <div id="reviewModal" class="modal">
+        <div class="modal-content">
+            <h3 style="color: #ff523b;">Pembayaran Berhasil!</h3>
+            <p style="font-size: 14px; color: #555; margin-top: 5px;">Silakan berikan ulasan & rating Anda untuk produk ini:</p>
+            
+            <div class="star-rating" id="starContainer">
+                <i class="fa fa-star active" onclick="setRating(1)"></i>
+                <i class="fa fa-star active" onclick="setRating(2)"></i>
+                <i class="fa fa-star active" onclick="setRating(3)"></i>
+                <i class="fa fa-star active" onclick="setRating(4)"></i>
+                <i class="fa fa-star active" onclick="setRating(5)"></i>
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <textarea id="reviewText" rows="3" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" placeholder="Tuliskan ulasan produk di sini..." required></textarea>
+            </div>
+            
+            <button onclick="submitReview()" class="btn" style="width: 100%; margin: 0; cursor: pointer; border: none;">Kirim Ulasan & Selesai</button>
+        </div>
+    </div>
+
     <!-- Footer -->
     <div class="footer">
         <div class="container">
@@ -162,11 +216,13 @@
         // Hitung Ringkasan dari Keranjang
         const cartItems = JSON.parse(localStorage.getItem('userCart')) || [];
         let subtotalTotal = 0;
+        let purchasedProductName = "Kaos Printed Red"; // Default nama produk jika keranjang kosong
 
         cartItems.forEach(item => {
             const prod = productsMaster[item.id];
             if (prod) {
                 subtotalTotal += prod.price * item.qty;
+                purchasedProductName = prod.name;
             }
         });
 
@@ -177,12 +233,16 @@
         document.getElementById("summaryTax").textContent = formatRupiah(tax);
         document.getElementById("summaryTotal").textContent = formatRupiah(grandTotal);
 
+        let selectedBank = "";
+        let selectedRating = 5;
+
         // Generator Nomor VA Demo
         function generateVA(e) {
             e.preventDefault();
             const bank = document.getElementById("bankSelect").value;
             if (!bank) return;
 
+            selectedBank = bank;
             const bankCodes = { "BCA": "8808", "Mandiri": "8908", "BNI": "8810", "BRI": "8811" };
             const randomDigits = Math.floor(1000000000 + Math.random() * 9000000000);
             const vaNumber = bankCodes[bank] + randomDigits;
@@ -192,12 +252,66 @@
             document.getElementById("vaResultBox").style.display = "block";
         }
 
-        // Simulasi Konfirmasi Pembayaran & Pembuatan Resi
+        // Simulasi Konfirmasi Pembayaran & Buka Form Ulasan
         function confirmPayment() {
             const randomResi = "RESI-" + Math.floor(10000000 + Math.random() * 90000000);
+            const randomTrxId = "TRX-" + Math.floor(10000000 + Math.random() * 90000000);
+            const currentUser = localStorage.getItem("currentUser") || "Pelanggan";
+
+            // Simpan Transaksi Baru ke LocalStorage untuk Panel Admin
+            let orders = JSON.parse(localStorage.getItem("adminOrders")) || [];
+            orders.unshift({
+                id: randomTrxId,
+                customer: currentUser,
+                method: "Virtual Account " + (selectedBank || "BCA"),
+                status: "Lunas",
+                resi: randomResi
+            });
+            localStorage.setItem("adminOrders", JSON.stringify(orders));
+
             alert("Pembayaran Berhasil Dikirim!\n\nNomor Resi Anda: " + randomResi + "\n\nTerima kasih telah berbelanja.");
+
+            // Tampilkan Modal Form Ulasan Produk
+            setRating(5);
+            document.getElementById("reviewModal").style.display = "block";
+        }
+
+        // Pengaturan Bintang Rating
+        function setRating(rating) {
+            selectedRating = rating;
+            const stars = document.querySelectorAll("#starContainer .fa-star");
+            stars.forEach((star, idx) => {
+                if (idx < rating) {
+                    star.classList.add("active");
+                } else {
+                    star.classList.remove("active");
+                }
+            });
+        }
+
+        // Simpan Ulasan ke LocalStorage untuk Panel Admin
+        function submitReview() {
+            const reviewText = document.getElementById("reviewText").value.trim();
+            if (!reviewText) {
+                alert("Harap tuliskan ulasan Anda terlebih dahulu.");
+                return;
+            }
+
+            const currentUser = localStorage.getItem("currentUser") || "Pelanggan";
+            let reviews = JSON.parse(localStorage.getItem("adminReviews")) || [];
             
-            // Kosongkan Keranjang Belanja
+            reviews.unshift({
+                id: Date.now(),
+                customer: currentUser,
+                product: purchasedProductName,
+                rating: selectedRating,
+                review: reviewText,
+                status: "Ditampilkan"
+            });
+
+            localStorage.setItem("adminReviews", JSON.stringify(reviews));
+
+            // Kosongkan Keranjang Belanja & Kembali ke Beranda
             localStorage.removeItem('userCart');
             window.location.href = "index.html";
         }

@@ -77,6 +77,13 @@
             border-radius: 4px;
             font-size: 12px;
         }
+        .badge-danger {
+            background: #dc3545;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
         .btn-action {
             padding: 5px 10px;
             background: #ff523b;
@@ -84,6 +91,61 @@
             border-radius: 4px;
             text-decoration: none;
             font-size: 12px;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Styling Modal Form CRUD */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 8% auto;
+            padding: 25px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        .close-btn {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+        }
+        .close-btn:hover {
+            color: #ff523b;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
         }
     </style>
 </head>
@@ -110,8 +172,8 @@
             <!-- Hero / Admin Title Section -->
             <div class="row" style="margin-top: 20px; padding-bottom: 30px;">
                 <div class="col-2">
-                    <h1>Panel Kelola Admin<br> Peran Penjual (RBAC)</h1>
-                    <p>Manajemen entitas e-commerce: Katalog & stok produk (CRUD), verifikasi pesanan, pembayaran virtual account, ulasan pelanggan, serta laporan omzet bulanan.</p>
+                    <h1>Panel Kelola Admin<br></h1>
+                    <p>Manajemen entitas e-commerce: Katalog & stok produk, verifikasi pesanan, pembayaran virtual account, ulasan pelanggan, serta laporan omzet bulanan.</p>
                 </div>
                 <div class="col-2" style="text-align: center;">
                     <i class="fa fa-user-secret fa-5x" style="color: #ff523b;"></i>
@@ -127,12 +189,12 @@
             <div class="admin-card">
                 <i class="fa fa-cubes fa-2x" style="color: #ff523b;"></i>
                 <h3>Katalog & Stok</h3>
-                <p>12 Item Produk</p>
+                <p id="totalProductCount">12 Item Produk</p>
             </div>
             <div class="admin-card">
                 <i class="fa fa-shopping-bag fa-2x" style="color: #ff523b;"></i>
                 <h3>Pesanan Masuk</h3>
-                <p>8 Transaksi</p>
+                <p id="totalOrderCount">8 Transaksi</p>
             </div>
             <div class="admin-card">
                 <i class="fa fa-line-chart fa-2x" style="color: #ff523b;"></i>
@@ -150,7 +212,7 @@
         <div class="admin-section" id="kelola-produk">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
                 <h3>Katalog & Stok Produk</h3>
-                <button onclick="alert('Form Tambah Produk Baru (CRUD)')" class="btn" style="padding: 8px 15px; font-size: 13px; margin: 0;">+ Tambah Produk Baru</button>
+                <button onclick="openProductModal()" class="btn" style="padding: 8px 15px; font-size: 13px; margin: 0; cursor: pointer;">+ Tambah Produk Baru</button>
             </div>
             <table class="admin-table">
                 <thead>
@@ -164,43 +226,8 @@
                         <th>Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>#PRD-1</td>
-                        <td><img src="images/product-1.jpg" width="40px" style="border-radius: 4px;"></td>
-                        <td>Kaos Printed Red</td>
-                        <td>Pakaian</td>
-                        <td>Rp 150.000</td>
-                        <td>15</td>
-                        <td>
-                            <a href="javascript:void(0);" onclick="alert('Edit Produk #PRD-1')" class="btn-action">Edit</a>
-                            <a href="javascript:void(0);" onclick="alert('Hapus Produk #PRD-1')" class="btn-action" style="background: #333;">Hapus</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>#PRD-2</td>
-                        <td><img src="images/product-2.jpg" width="40px" style="border-radius: 4px;"></td>
-                        <td>Sepatu Lari Black HRX</td>
-                        <td>Sepatu</td>
-                        <td>Rp 250.000</td>
-                        <td>8</td>
-                        <td>
-                            <a href="javascript:void(0);" onclick="alert('Edit Produk #PRD-2')" class="btn-action">Edit</a>
-                            <a href="javascript:void(0);" onclick="alert('Hapus Produk #PRD-2')" class="btn-action" style="background: #333;">Hapus</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>#PRD-3</td>
-                        <td><img src="images/product-3.jpg" width="40px" style="border-radius: 4px;"></td>
-                        <td>Celana Sweatpants Grey</td>
-                        <td>Pakaian</td>
-                        <td>Rp 350.000</td>
-                        <td>20</td>
-                        <td>
-                            <a href="javascript:void(0);" onclick="alert('Edit Produk #PRD-3')" class="btn-action">Edit</a>
-                            <a href="javascript:void(0);" onclick="alert('Hapus Produk #PRD-3')" class="btn-action" style="background: #333;">Hapus</a>
-                        </td>
-                    </tr>
+                <tbody id="productTableBody">
+                    <!-- Data Produk Dirender Secara Dinamis via JavaScript -->
                 </tbody>
             </table>
         </div>
@@ -219,23 +246,8 @@
                         <th>Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>#TRX-88219403</td>
-                        <td>Sean Parker</td>
-                        <td>Virtual Account BCA</td>
-                        <td><span class="badge-success">Lunas</span></td>
-                        <td><strong>RESI-88219403</strong></td>
-                        <td><a href="javascript:void(0);" onclick="alert('Detail Pesanan TRX-88219403')" class="btn-action">Detail</a></td>
-                    </tr>
-                    <tr>
-                        <td>#TRX-88219404</td>
-                        <td>Mike Smith</td>
-                        <td>Virtual Account Mandiri</td>
-                        <td><span class="badge-warning">Menunggu Konfirmasi</span></td>
-                        <td><em>Belum Diinput</em></td>
-                        <td><a href="javascript:void(0);" onclick="alert('Input Resi Pengiriman')" class="btn-action">Input Resi</a></td>
-                    </tr>
+                <tbody id="orderTableBody">
+                    <!-- Data Pesanan Dirender Secara Dinamis via JavaScript -->
                 </tbody>
             </table>
         </div>
@@ -251,25 +263,75 @@
                         <th>Rating</th>
                         <th>Ulasan / Review</th>
                         <th>Status</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>Sean Parker</td>
-                        <td>Kaos Printed Red</td>
-                        <td><i class="fa fa-star" style="color:#ff523b;"></i> 5.0</td>
-                        <td>Proses pemesanan sangat cepat, checkout dengan perhitungan total otomatis sangat membantu!</td>
-                        <td><span class="badge-success">Ditampilkan</span></td>
-                    </tr>
-                    <tr>
-                        <td>Mike Smith</td>
-                        <td>Sepatu Lari Black HRX</td>
-                        <td><i class="fa fa-star" style="color:#ff523b;"></i> 5.0</td>
-                        <td>Konfirmasi pembayaran via gateway bekerja secara instan. Nomor resi langsung muncul.</td>
-                        <td><span class="badge-success">Ditampilkan</span></td>
-                    </tr>
+                <tbody id="reviewTableBody">
+                    <!-- Data Ulasan Dirender Secara Dinamis via JavaScript -->
                 </tbody>
             </table>
+        </div>
+    </div>
+
+    <!-- Modal Form Tambah / Edit Produk (CRUD) -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeProductModal()">&times;</span>
+            <h3 id="modalTitle" style="color: #ff523b; margin-bottom: 20px;">Tambah Produk Baru</h3>
+            <form id="productForm" onsubmit="saveProduct(event)">
+                <input type="hidden" id="editProductId">
+                <div class="form-group">
+                    <label>Nama Produk</label>
+                    <input type="text" id="prodName" required placeholder="Contoh: Kaos Printed Red">
+                </div>
+                <div class="form-group">
+                    <label>Kategori</label>
+                    <select id="prodCategory" required>
+                        <option value="Pakaian">Pakaian</option>
+                        <option value="Sepatu">Sepatu</option>
+                        <option value="Aksesoris">Aksesoris</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Harga (Rp)</label>
+                    <input type="number" id="prodPrice" required placeholder="Contoh: 150000">
+                </div>
+                <div class="form-group">
+                    <label>Stok</label>
+                    <input type="number" id="prodStock" required placeholder="Contoh: 15">
+                </div>
+                <div class="form-group">
+                    <label>Path/URL Gambar</label>
+                    <input type="text" id="prodImg" required placeholder="images/product-1.jpg">
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="btn" style="flex: 1; margin: 0; padding: 10px; cursor: pointer;">Simpan Produk</button>
+                    <button type="button" onclick="closeProductModal()" class="btn" style="flex: 1; margin: 0; padding: 10px; background: #555; cursor: pointer;">Batal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Input Resi / Verifikasi Pesanan -->
+    <div id="resiModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeResiModal()">&times;</span>
+            <h3 style="color: #ff523b; margin-bottom: 20px;">Input Resi Pengiriman</h3>
+            <form id="resiForm" onsubmit="saveResi(event)">
+                <input type="hidden" id="resiTrxId">
+                <div class="form-group">
+                    <label>ID Transaksi</label>
+                    <input type="text" id="displayTrxId" readonly style="background: #f0f0f0;">
+                </div>
+                <div class="form-group">
+                    <label>Nomor Resi Pengiriman</label>
+                    <input type="text" id="inputResiNum" required placeholder="Contoh: RESI-88219404">
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="btn" style="flex: 1; margin: 0; padding: 10px; cursor: pointer;">Simpan & Konfirmasi Lunas</button>
+                    <button type="button" onclick="closeResiModal()" class="btn" style="flex: 1; margin: 0; padding: 10px; background: #555; cursor: pointer;">Batal</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -312,7 +374,7 @@
         </div>
     </div>
 
-    <!-- JavaScript Navigation & Auth Check -->
+    <!-- JavaScript Navigation & Full Engine -->
     <script>
         var MenuItems = document.getElementById("MenuItems");
         MenuItems.style.maxHeight = "0px";
@@ -324,12 +386,275 @@
             }
         }
 
-        // Fungsi Logout Admin
+        // Logout Admin
         function logoutAdmin() {
             localStorage.removeItem("userRole");
+            localStorage.removeItem("currentUser");
             alert("Anda telah keluar dari akun Admin.");
             window.location.href = "account.html";
         }
+
+        // 1. MANAJEMEN KATALOG & STOK PRODUK (CRUD) - LENGKAP 12 PRODUK
+        const defaultAdminProducts = [
+            { id: "PRD-1", name: "Kaos Printed Red", category: "Pakaian", price: 150000, stock: 15, img: "images/product-1.jpg" },
+            { id: "PRD-2", name: "Sepatu Lari Black HRX", category: "Sepatu", price: 250000, stock: 8, img: "images/product-2.jpg" },
+            { id: "PRD-3", name: "Celana Sweatpants Grey", category: "Pakaian", price: 350000, stock: 20, img: "images/product-3.jpg" },
+            { id: "PRD-4", name: "Kaos Polo Navy Puma", category: "Pakaian", price: 420000, stock: 5, img: "images/product-4.jpg" },
+            { id: "PRD-5", name: "Sepatu Casual High Top", category: "Sepatu", price: 280000, stock: 12, img: "images/product-5.jpg" },
+            { id: "PRD-6", name: "Kaos Polos Black", category: "Pakaian", price: 95000, stock: 30, img: "images/product-6.jpg" },
+            { id: "PRD-7", name: "Kaos Kaki Sport 3 in 1", category: "Aksesoris", price: 45000, stock: 50, img: "images/product-7.jpg" },
+            { id: "PRD-8", name: "Jam Tangan Analog Black", category: "Aksesoris", price: 490000, stock: 10, img: "images/product-8.jpg" },
+            { id: "PRD-9", name: "Jam Tangan Sport Roadster", category: "Aksesoris", price: 210000, stock: 15, img: "images/product-9.jpg" },
+            { id: "PRD-10", name: "Sepatu Running Black Red", category: "Sepatu", price: 530000, stock: 6, img: "images/product-10.jpg" },
+            { id: "PRD-11", name: "Sepatu Casual Grey", category: "Sepatu", price: 310000, stock: 18, img: "images/product-11.jpg" },
+            { id: "PRD-12", name: "Celana Jogger Black Nike", category: "Pakaian", price: 175000, stock: 25, img: "images/product-12.jpg" }
+        ];
+
+        function getProducts() {
+            const stored = localStorage.getItem("adminProducts");
+            if (!stored) {
+                localStorage.setItem("adminProducts", JSON.stringify(defaultAdminProducts));
+                return defaultAdminProducts;
+            }
+            return JSON.parse(stored);
+        }
+
+        function formatRupiah(number) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(number);
+        }
+
+        function renderProducts() {
+            const products = getProducts();
+            const tbody = document.getElementById("productTableBody");
+            const countText = document.getElementById("totalProductCount");
+            
+            tbody.innerHTML = "";
+            countText.textContent = `${products.length} Item Produk`;
+
+            products.forEach(p => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>#${p.id}</td>
+                    <td><img src="${p.img}" width="40px" style="border-radius: 4px;" onerror="this.src='images/product-1.jpg'"></td>
+                    <td>${p.name}</td>
+                    <td>${p.category}</td>
+                    <td>${formatRupiah(p.price)}</td>
+                    <td>${p.stock}</td>
+                    <td>
+                        <button onclick="openEditModal('${p.id}')" class="btn-action">Edit</button>
+                        <button onclick="deleteProduct('${p.id}')" class="btn-action" style="background: #333;">Hapus</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function openProductModal() {
+            document.getElementById("modalTitle").textContent = "Tambah Produk Baru";
+            document.getElementById("productForm").reset();
+            document.getElementById("editProductId").value = "";
+            document.getElementById("productModal").style.display = "block";
+        }
+
+        function closeProductModal() {
+            document.getElementById("productModal").style.display = "none";
+        }
+
+        function openEditModal(id) {
+            const products = getProducts();
+            const prod = products.find(p => p.id === id);
+            if (!prod) return;
+
+            document.getElementById("modalTitle").textContent = `Edit Produk #${prod.id}`;
+            document.getElementById("editProductId").value = prod.id;
+            document.getElementById("prodName").value = prod.name;
+            document.getElementById("prodCategory").value = prod.category;
+            document.getElementById("prodPrice").value = prod.price;
+            document.getElementById("prodStock").value = prod.stock;
+            document.getElementById("prodImg").value = prod.img;
+
+            document.getElementById("productModal").style.display = "block";
+        }
+
+        function saveProduct(e) {
+            e.preventDefault();
+            let products = getProducts();
+            const editId = document.getElementById("editProductId").value;
+
+            const name = document.getElementById("prodName").value.trim();
+            const category = document.getElementById("prodCategory").value;
+            const price = parseInt(document.getElementById("prodPrice").value);
+            const stock = parseInt(document.getElementById("prodStock").value);
+            const img = document.getElementById("prodImg").value.trim();
+
+            if (editId) {
+                const index = products.findIndex(p => p.id === editId);
+                if (index !== -1) {
+                    products[index] = { id: editId, name, category, price, stock, img };
+                    alert(`Produk #${editId} berhasil diperbarui!`);
+                }
+            } else {
+                const nextNum = products.length > 0 ? Math.max(...products.map(p => parseInt(p.id.replace("PRD-", "")) || 0)) + 1 : 1;
+                const newId = `PRD-${nextNum}`;
+                products.push({ id: newId, name, category, price, stock, img });
+                alert(`Produk baru #${newId} berhasil ditambahkan!`);
+            }
+
+            localStorage.setItem("adminProducts", JSON.stringify(products));
+            closeProductModal();
+            renderProducts();
+        }
+
+        function deleteProduct(id) {
+            if (confirm(`Apakah Anda yakin ingin menghapus produk #${id}?`)) {
+                let products = getProducts();
+                products = products.filter(p => p.id !== id);
+                localStorage.setItem("adminProducts", JSON.stringify(products));
+                alert(`Produk #${id} berhasil dihapus.`);
+                renderProducts();
+            }
+        }
+
+        // 2. MANAJEMEN PESANAN & INPUT RESI
+        const defaultOrders = [
+            { id: "TRX-88219403", customer: "Sean Parker", method: "Virtual Account BCA", status: "Lunas", resi: "RESI-88219403" },
+            { id: "TRX-88219404", customer: "Mike Smith", method: "Virtual Account Mandiri", status: "Menunggu Konfirmasi", resi: "" }
+        ];
+
+        function getOrders() {
+            const stored = localStorage.getItem("adminOrders");
+            if (!stored) {
+                localStorage.setItem("adminOrders", JSON.stringify(defaultOrders));
+                return defaultOrders;
+            }
+            return JSON.parse(stored);
+        }
+
+        function renderOrders() {
+            const orders = getOrders();
+            const tbody = document.getElementById("orderTableBody");
+            const countText = document.getElementById("totalOrderCount");
+            tbody.innerHTML = "";
+            if (countText) countText.textContent = `${orders.length} Transaksi`;
+
+            orders.forEach(o => {
+                const tr = document.createElement("tr");
+                const statusBadge = o.status === "Lunas" 
+                    ? `<span class="badge-success">Lunas</span>` 
+                    : `<span class="badge-warning">Menunggu Konfirmasi</span>`;
+                
+                const resiText = o.resi ? `<strong>${o.resi}</strong>` : `<em>Belum Diinput</em>`;
+                const actionBtn = o.resi 
+                    ? `<button onclick="viewOrderDetail('${o.id}')" class="btn-action">Detail</button>` 
+                    : `<button onclick="openResiModal('${o.id}')" class="btn-action">Input Resi</button>`;
+
+                tr.innerHTML = `
+                    <td>#${o.id}</td>
+                    <td>${o.customer}</td>
+                    <td>${o.method}</td>
+                    <td>${statusBadge}</td>
+                    <td>${resiText}</td>
+                    <td>${actionBtn}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function openResiModal(id) {
+            document.getElementById("resiTrxId").value = id;
+            document.getElementById("displayTrxId").value = `#${id}`;
+            document.getElementById("inputResiNum").value = `RESI-${id.replace('TRX-', '')}`;
+            document.getElementById("resiModal").style.display = "block";
+        }
+
+        function closeResiModal() {
+            document.getElementById("resiModal").style.display = "none";
+        }
+
+        function saveResi(e) {
+            e.preventDefault();
+            const id = document.getElementById("resiTrxId").value;
+            const resiNum = document.getElementById("inputResiNum").value.trim();
+
+            let orders = getOrders();
+            const index = orders.findIndex(o => o.id === id);
+            if (index !== -1) {
+                orders[index].resi = resiNum;
+                orders[index].status = "Lunas";
+                localStorage.setItem("adminOrders", JSON.stringify(orders));
+                alert(`Nomor resi ${resiNum} berhasil diinput. Pembayaran otomatis diverifikasi Lunas!`);
+            }
+            closeResiModal();
+            renderOrders();
+        }
+
+        function viewOrderDetail(id) {
+            const orders = getOrders();
+            const o = orders.find(item => item.id === id);
+            if (o) {
+                alert(`DETAIL TRANSAKSI:\n\nID Transaksi: #${o.id}\nPelanggan: ${o.customer}\nPembayaran: ${o.method}\nStatus: ${o.status}\nNomor Resi: ${o.resi}`);
+            }
+        }
+
+        // 3. MODERASI ULASAN
+        const defaultReviews = [
+            { id: 1, customer: "Sean Parker", product: "Kaos Printed Red", rating: 5.0, review: "Proses pemesanan sangat cepat, checkout dengan perhitungan total otomatis sangat membantu!", status: "Ditampilkan" },
+            { id: 2, customer: "Mike Smith", product: "Sepatu Lari Black HRX", rating: 5.0, review: "Konfirmasi pembayaran via gateway bekerja secara instan. Nomor resi langsung muncul.", status: "Ditampilkan" }
+        ];
+
+        function getReviews() {
+            const stored = localStorage.getItem("adminReviews");
+            if (!stored) {
+                localStorage.setItem("adminReviews", JSON.stringify(defaultReviews));
+                return defaultReviews;
+            }
+            return JSON.parse(stored);
+        }
+
+        function renderReviews() {
+            const reviews = getReviews();
+            const tbody = document.getElementById("reviewTableBody");
+            tbody.innerHTML = "";
+
+            reviews.forEach(r => {
+                const tr = document.createElement("tr");
+                const statusBadge = r.status === "Ditampilkan" 
+                    ? `<span class="badge-success">Ditampilkan</span>` 
+                    : `<span class="badge-danger">Disembunyikan</span>`;
+                
+                const toggleBtnText = r.status === "Ditampilkan" ? "Sembunyikan" : "Tampilkan";
+                const toggleBtnBg = r.status === "Ditampilkan" ? "background: #333;" : "background: #28a745;";
+
+                tr.innerHTML = `
+                    <td>${r.customer}</td>
+                    <td>${r.product}</td>
+                    <td><i class="fa fa-star" style="color:#ff523b;"></i> ${r.rating.toFixed(1)}</td>
+                    <td>${r.review}</td>
+                    <td>${statusBadge}</td>
+                    <td>
+                        <button onclick="toggleReviewStatus(${r.id})" class="btn-action" style="${toggleBtnBg}">${toggleBtnText}</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function toggleReviewStatus(id) {
+            let reviews = getReviews();
+            const index = reviews.findIndex(r => r.id === id);
+            if (index !== -1) {
+                reviews[index].status = reviews[index].status === "Ditampilkan" ? "Disembunyikan" : "Ditampilkan";
+                localStorage.setItem("adminReviews", JSON.stringify(reviews));
+                renderReviews();
+            }
+        }
+
+        // Pemuatan Awal Data
+        window.addEventListener("DOMContentLoaded", () => {
+            renderProducts();
+            renderOrders();
+            renderReviews();
+        });
     </script>
 
 </body>

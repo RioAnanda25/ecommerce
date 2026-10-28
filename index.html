@@ -144,37 +144,12 @@
         </div>
     </div>
 
-    <!-- FITUR: Ulasan & Rating dari Pelanggan -->
+    <!-- FITUR: Ulasan & Rating dari Pelanggan (Render Dinamis Berdasarkan Moderasi Admin) -->
     <div class="testimonial">
         <div class="small-container">
             <h2 class="title">Ulasan Pelanggan</h2>
-            <div class="row">
-                <div class="col-3">
-                    <i class="fa fa-quote-left"></i>
-                    <p>Proses pemesanan sangat cepat, checkout dengan perhitungan total otomatis sangat membantu!</p>
-                    <div class="rating">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                    </div>
-                    <img src="images/user-1.png" alt="User 1">
-                    <h3>Sean Parker</h3>
-                </div>
-                <div class="col-3">
-                    <i class="fa fa-quote-left"></i>
-                    <p>Konfirmasi pembayaran via gateway bekerja secara instan. Nomor resi langsung muncul.</p>
-                    <div class="rating">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                    </div>
-                    <img src="images/user-2.png" alt="User 2">
-                    <h3>Mike Smith</h3>
-                </div>
+            <div class="row" id="testimonialContainer">
+                <!-- Data ulasan yang berstatus 'Ditampilkan' dirender dinamis via JavaScript -->
             </div>
         </div>
     </div>
@@ -218,7 +193,7 @@
         </div>
     </div>
 
-    <!-- JavaScript -->
+    <!-- JavaScript Navigation & Dynamic Reviews Handler -->
     <script>
         var MenuItems = document.getElementById("MenuItems");
         MenuItems.style.maxHeight = "0px";
@@ -229,6 +204,64 @@
                 MenuItems.style.maxHeight = "0px";
             }
         }
+
+        // Render Ulasan Pelanggan Secara Dinamis Mengikuti Moderasi Admin
+        function renderTestimonials() {
+            const container = document.getElementById("testimonialContainer");
+            if (!container) return;
+
+            // Default ulasan awal
+            const defaultReviews = [
+                { id: 1, customer: "Sean Parker", product: "Kaos Printed Red", rating: 5.0, review: "Proses pemesanan sangat cepat, checkout dengan perhitungan total otomatis sangat membantu!", status: "Ditampilkan" },
+                { id: 2, customer: "Mike Smith", product: "Sepatu Lari Black HRX", rating: 5.0, review: "Konfirmasi pembayaran via gateway bekerja secara instan. Nomor resi langsung muncul.", status: "Ditampilkan" }
+            ];
+
+            const stored = localStorage.getItem("adminReviews");
+            const reviews = stored ? JSON.parse(stored) : defaultReviews;
+
+            // Hanya filter ulasan yang berstatus "Ditampilkan" oleh Admin
+            const visibleReviews = reviews.filter(r => r.status === "Ditampilkan");
+
+            container.innerHTML = "";
+
+            if (visibleReviews.length === 0) {
+                container.innerHTML = `<p style="text-align: center; width: 100%; color: #777;">Belum ada ulasan yang ditampilkan.</p>`;
+                return;
+            }
+
+            visibleReviews.forEach((r, idx) => {
+                const col = document.createElement("div");
+                col.className = "col-3";
+
+                // Pilihan gambar avatar secara acak/berurutan
+                const userImg = (idx % 2 === 0) ? "images/user-1.png" : "images/user-2.png";
+
+                // Hitung bintang rating
+                let starsHtml = "";
+                const fullStars = Math.floor(r.rating);
+                for (let i = 0; i < 5; i++) {
+                    if (i < fullStars) {
+                        starsHtml += `<i class="fa fa-star"></i>`;
+                    } else {
+                        starsHtml += `<i class="fa fa-star-o"></i>`;
+                    }
+                }
+
+                col.innerHTML = `
+                    <i class="fa fa-quote-left"></i>
+                    <p>${r.review}</p>
+                    <div class="rating">
+                        ${starsHtml}
+                    </div>
+                    <img src="${userImg}" alt="${r.customer}">
+                    <h3>${r.customer}</h3>
+                `;
+                container.appendChild(col);
+            });
+        }
+
+        // Muat ulasan saat halaman dimuat
+        window.addEventListener("DOMContentLoaded", renderTestimonials);
     </script>
 
 </body>
