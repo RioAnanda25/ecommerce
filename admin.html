@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Kontrol Admin | Sistem E-Commerce</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        .admin-dashboard {
+            margin-top: 30px;
+            margin-bottom: 50px;
+        }
+        .admin-cards {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        .admin-card {
+            flex: 1;
+            min-width: 200px;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .admin-card h3 {
+            color: #ff523b;
+            margin-top: 10px;
+            font-size: 18px;
+        }
+        .admin-card p {
+            font-size: 14px;
+            color: #555;
+            margin-top: 5px;
+        }
+        .admin-section {
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .admin-table th, .admin-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+            font-size: 14px;
+        }
+        .admin-table th {
+            background: #ff523b;
+            color: #fff;
+        }
+        .badge-success {
+            background: #28a745;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .badge-warning {
+            background: #ffc107;
+            color: #333;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .btn-action {
+            padding: 5px 10px;
+            background: #ff523b;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header & Navigation -->
+    <div class="header" style="background: radial-gradient(#fff, #ffd6d6);">
+        <div class="container">
+            <div class="navbar" style="display: flex; align-items: center;">
+                <div class="logo">
+                    <a href="admin.html"><img src="images/online-shop.png" alt="logo" width="65px"></a>
+                </div>
+                <nav>
+                    <ul id="MenuItems" style="margin: 0; padding: 0;">
+                        <li><a href="admin.html">Dashboard Admin</a></li>
+                        <li><a href="#kelola-produk">Katalog Produk</a></li>
+                        <li><a href="javascript:void(0);" onclick="logoutAdmin()">Keluar (Logout)</a></li>
+                    </ul>
+                </nav>
+                <img src="images/menu.png" class="menu-icon" onclick="menutoggle()" alt="Menu Toggle">
+            </div>
+            
+            <!-- Hero / Admin Title Section -->
+            <div class="row" style="margin-top: 20px; padding-bottom: 30px;">
+                <div class="col-2">
+                    <h1>Panel Kelola Admin<br> Peran Penjual (RBAC)</h1>
+                    <p>Manajemen entitas e-commerce: Katalog & stok produk (CRUD), verifikasi pesanan, pembayaran virtual account, ulasan pelanggan, serta laporan omzet bulanan.</p>
+                </div>
+                <div class="col-2" style="text-align: center;">
+                    <i class="fa fa-user-secret fa-5x" style="color: #ff523b;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FITUR ADMIN 1: Ringkasan Entitas & Omzet Bulanan -->
+    <div class="small-container admin-dashboard">
+        <h2 class="title">Ringkasan Sistem</h2>
+        <div class="admin-cards">
+            <div class="admin-card">
+                <i class="fa fa-cubes fa-2x" style="color: #ff523b;"></i>
+                <h3>Katalog & Stok</h3>
+                <p>12 Item Produk</p>
+            </div>
+            <div class="admin-card">
+                <i class="fa fa-shopping-bag fa-2x" style="color: #ff523b;"></i>
+                <h3>Pesanan Masuk</h3>
+                <p>8 Transaksi</p>
+            </div>
+            <div class="admin-card">
+                <i class="fa fa-line-chart fa-2x" style="color: #ff523b;"></i>
+                <h3>Laporan Omzet</h3>
+                <p>Rp 15.400.000 / Bulan</p>
+            </div>
+            <div class="admin-card">
+                <i class="fa fa-users fa-2x" style="color: #ff523b;"></i>
+                <h3>Pengguna (User)</h3>
+                <p>25 Pelanggan Terdaftar</p>
+            </div>
+        </div>
+
+        <!-- FITUR ADMIN 2: Kelola Katalog & Stok Produk (CRUD) -->
+        <div class="admin-section" id="kelola-produk">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                <h3>Katalog & Stok Produk</h3>
+                <button onclick="alert('Form Tambah Produk Baru (CRUD)')" class="btn" style="padding: 8px 15px; font-size: 13px; margin: 0;">+ Tambah Produk Baru</button>
+            </div>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Gambar</th>
+                        <th>Nama Produk</th>
+                        <th>Kategori</th>
+                        <th>Varian Harga</th>
+                        <th>Stok</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#PRD-1</td>
+                        <td><img src="images/product-1.jpg" width="40px" style="border-radius: 4px;"></td>
+                        <td>Kaos Printed Red</td>
+                        <td>Pakaian</td>
+                        <td>Rp 150.000</td>
+                        <td>15</td>
+                        <td>
+                            <a href="javascript:void(0);" onclick="alert('Edit Produk #PRD-1')" class="btn-action">Edit</a>
+                            <a href="javascript:void(0);" onclick="alert('Hapus Produk #PRD-1')" class="btn-action" style="background: #333;">Hapus</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>#PRD-2</td>
+                        <td><img src="images/product-2.jpg" width="40px" style="border-radius: 4px;"></td>
+                        <td>Sepatu Lari Black HRX</td>
+                        <td>Sepatu</td>
+                        <td>Rp 250.000</td>
+                        <td>8</td>
+                        <td>
+                            <a href="javascript:void(0);" onclick="alert('Edit Produk #PRD-2')" class="btn-action">Edit</a>
+                            <a href="javascript:void(0);" onclick="alert('Hapus Produk #PRD-2')" class="btn-action" style="background: #333;">Hapus</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>#PRD-3</td>
+                        <td><img src="images/product-3.jpg" width="40px" style="border-radius: 4px;"></td>
+                        <td>Celana Sweatpants Grey</td>
+                        <td>Pakaian</td>
+                        <td>Rp 350.000</td>
+                        <td>20</td>
+                        <td>
+                            <a href="javascript:void(0);" onclick="alert('Edit Produk #PRD-3')" class="btn-action">Edit</a>
+                            <a href="javascript:void(0);" onclick="alert('Hapus Produk #PRD-3')" class="btn-action" style="background: #333;">Hapus</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- FITUR ADMIN 3: Pesanan, Konfirmasi Pembayaran & Nomor Resi -->
+        <div class="admin-section">
+            <h3>Pesanan Masuk & Verifikasi Pembayaran</h3>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID Transaksi</th>
+                        <th>Pelanggan</th>
+                        <th>Metode Pembayaran</th>
+                        <th>Status Pembayaran</th>
+                        <th>Nomor Resi</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#TRX-88219403</td>
+                        <td>Sean Parker</td>
+                        <td>Virtual Account BCA</td>
+                        <td><span class="badge-success">Lunas</span></td>
+                        <td><strong>RESI-88219403</strong></td>
+                        <td><a href="javascript:void(0);" onclick="alert('Detail Pesanan TRX-88219403')" class="btn-action">Detail</a></td>
+                    </tr>
+                    <tr>
+                        <td>#TRX-88219404</td>
+                        <td>Mike Smith</td>
+                        <td>Virtual Account Mandiri</td>
+                        <td><span class="badge-warning">Menunggu Konfirmasi</span></td>
+                        <td><em>Belum Diinput</em></td>
+                        <td><a href="javascript:void(0);" onclick="alert('Input Resi Pengiriman')" class="btn-action">Input Resi</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- FITUR ADMIN 4: Ulasan / Rating Pelanggan -->
+        <div class="admin-section">
+            <h3>Moderasi Ulasan & Rating Pelanggan</h3>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Pelanggan</th>
+                        <th>Produk</th>
+                        <th>Rating</th>
+                        <th>Ulasan / Review</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sean Parker</td>
+                        <td>Kaos Printed Red</td>
+                        <td><i class="fa fa-star" style="color:#ff523b;"></i> 5.0</td>
+                        <td>Proses pemesanan sangat cepat, checkout dengan perhitungan total otomatis sangat membantu!</td>
+                        <td><span class="badge-success">Ditampilkan</span></td>
+                    </tr>
+                    <tr>
+                        <td>Mike Smith</td>
+                        <td>Sepatu Lari Black HRX</td>
+                        <td><i class="fa fa-star" style="color:#ff523b;"></i> 5.0</td>
+                        <td>Konfirmasi pembayaran via gateway bekerja secara instan. Nomor resi langsung muncul.</td>
+                        <td><span class="badge-success">Ditampilkan</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="footer-col-1">
+                    <h3>Unduh Aplikasi</h3>
+                    <p>Tersedia untuk smartphone Android dan iOS.</p>
+                    <div class="app-logo">
+                        <img src="images/play-store.png" alt="Play Store">
+                        <img src="images/app-store.png" alt="App Store">
+                    </div>
+                </div>
+                <div class="footer-col-2">
+                    <img src="images/online-shop.png" alt="Logo White">
+                    <p>Sistem E-Commerce Terpercaya untuk Kebutuhan Belanja Anda.</p>
+                </div>
+                <div class="footer-col-3">
+                    <h3>Layanan</h3>
+                    <ul>
+                        <li>Produk & Stok</li>
+                        <li>Shopping Cart</li>
+                        <li>Konfirmasi Pembayaran</li>
+                        <li>Lacak Resi</li>
+                    </ul>
+                </div>
+                <div class="footer-col-4">
+                    <h3>Ikuti Kami</h3>
+                    <ul>
+                        <li>Facebook</li>
+                        <li>Instagram</li>
+                        <li>Twitter</li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <p class="copyright">Copyright 2026 - E-Commerce System</p>
+        </div>
+    </div>
+
+    <!-- JavaScript Navigation & Auth Check -->
+    <script>
+        var MenuItems = document.getElementById("MenuItems");
+        MenuItems.style.maxHeight = "0px";
+        function menutoggle() {
+            if (MenuItems.style.maxHeight == "0px") {
+                MenuItems.style.maxHeight = "200px";
+            } else {
+                MenuItems.style.maxHeight = "0px";
+            }
+        }
+
+        // Fungsi Logout Admin
+        function logoutAdmin() {
+            localStorage.removeItem("userRole");
+            alert("Anda telah keluar dari akun Admin.");
+            window.location.href = "account.html";
+        }
+    </script>
+
+</body>
+
+</html>

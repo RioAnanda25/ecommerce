@@ -33,28 +33,28 @@
     <div class="small-container single-product">
         <div class="row">
             <div class="col-2">
-                <img src="images/gallery-1.jpg" width="100%" id="ProductImg" alt="Gambar Utama Produk">
+                <img src="images/product-1.jpg" width="100%" id="ProductImg" alt="Gambar Utama Produk">
 
                 <div class="small-img-row">
                     <div class="small-img-col">
-                        <img src="images/gallery-1.jpg" width="100%" class="small-img" alt="Galeri 1">
+                        <img src="images/product-1.jpg" width="100%" class="small-img" alt="Galeri 1">
                     </div>
                     <div class="small-img-col">
-                        <img src="images/gallery-2.jpg" width="100%" class="small-img" alt="Galeri 2">
+                        <img src="images/gallery-1.jpg" width="100%" class="small-img" alt="Galeri 2">
                     </div>
                     <div class="small-img-col">
-                        <img src="images/gallery-3.jpg" width="100%" class="small-img" alt="Galeri 3">
+                        <img src="images/gallery-2.jpg" width="100%" class="small-img" alt="Galeri 3">
                     </div>
                     <div class="small-img-col">
-                        <img src="images/gallery-4.jpg" width="100%" class="small-img" alt="Galeri 4">
+                        <img src="images/gallery-3.jpg" width="100%" class="small-img" alt="Galeri 4">
                     </div>
                 </div>
 
             </div>
             <div class="col-2">
-                <p>Beranda / Kaos</p>
-                <h1>Kaos Printed Red</h1>
-                <h4>Rp 150.000</h4>
+                <p id="productCategory">Beranda / Kaos</p>
+                <h1 id="productTitle">Kaos Printed Red</h1>
+                <h4 id="productPrice">Rp 150.000</h4>
                 <select>
                     <option>Pilih Ukuran</option>
                     <option>XXL</option>
@@ -63,12 +63,12 @@
                     <option>M</option>
                     <option>S</option>
                 </select>
-                <input type="number" value="1">
-                <a href="cart.html" class="btn">Tambah ke Keranjang</a>
+                <input type="number" id="productQuantity" value="1" min="1">
+                <a href="javascript:void(0);" onclick="addToCartAuth()" id="addToCartBtn" class="btn">Tambah ke Keranjang</a>
 
                 <h3>Detail Produk <i class="fa fa-indent"></i></h3>
                 <br>
-                <p>Tingkatkan gaya pakaian musim panas Anda dengan Kaos Puma Men's Active. Padukan dengan celana pendek untuk olahraga pagi Anda atau celana denim untuk bersantai di sore hari bersama teman-teman.</p>
+                <p id="productDesc">Tingkatkan gaya pakaian musim panas Anda dengan Kaos Puma Men's Active. Padukan dengan celana pendek untuk olahraga pagi Anda atau celana denim untuk bersantai di sore hari bersama teman-teman.</p>
             </div>
         </div>
     </div>
@@ -85,7 +85,7 @@
     <div class="small-container">
         <div class="row">
             <div class="col-4">
-                <img src="images/product-9.jpg" alt="Jam Tangan Sport">
+                <a href="product_details.html?id=9"><img src="images/product-9.jpg" alt="Jam Tangan Sport"></a>
                 <h4>Jam Tangan Sport Roadster</h4>
                 <div class="rating">
                     <i class="fa fa-star"></i>
@@ -97,7 +97,7 @@
                 <p>Rp 210.000</p>
             </div>
             <div class="col-4">
-                <img src="images/product-10.jpg" alt="Sepatu Running Black Red">
+                <a href="product_details.html?id=10"><img src="images/product-10.jpg" alt="Sepatu Running Black Red"></a>
                 <h4>Sepatu Running Black Red</h4>
                 <div class="rating">
                     <i class="fa fa-star"></i>
@@ -109,7 +109,7 @@
                 <p>Rp 530.000</p>
             </div>
             <div class="col-4">
-                <img src="images/product-11.jpg" alt="Sepatu Casual Grey">
+                <a href="product_details.html?id=11"><img src="images/product-11.jpg" alt="Sepatu Casual Grey"></a>
                 <h4>Sepatu Casual Grey</h4>
                 <div class="rating">
                     <i class="fa fa-star"></i>
@@ -121,7 +121,7 @@
                 <p>Rp 310.000</p>
             </div>
             <div class="col-4">
-                <img src="images/product-12.jpg" alt="Celana Jogger Black">
+                <a href="product_details.html?id=12"><img src="images/product-12.jpg" alt="Celana Jogger Black"></a>
                 <h4>Celana Jogger Black Nike</h4>
                 <div class="rating">
                     <i class="fa fa-star"></i>
@@ -188,22 +188,75 @@
         }
     </script>
 
-    <!-- Product Gallery JavaScript -->
+    <!-- Dynamic Product Details & Gallery JavaScript -->
     <script>
+        // Data Produk Lengkap
+        const productsData = {
+            "1": { name: "Kaos Printed Red", category: "Pakaian", price: "Rp 150.000", img: "images/product-1.jpg", desc: "Tingkatkan gaya pakaian musim panas Anda dengan Kaos Puma Men's Active. Padukan dengan celana pendek untuk olahraga pagi Anda atau celana denim untuk bersantai di sore hari bersama teman-teman." },
+            "2": { name: "Sepatu Lari Black HRX", category: "Sepatu", price: "Rp 250.000", img: "images/product-2.jpg", desc: "Sepatu lari berbahan ringan dan breathable dengan daya cengkeram optimal untuk kenyamanan berlari sehari-hari." },
+            "3": { name: "Celana Sweatpants Grey", category: "Pakaian", price: "Rp 350.000", img: "images/product-3.jpg", desc: "Celana sweatpants kasual berkualitas tinggi, sangat nyaman digunakan untuk santai maupun olahraga ringan." },
+            "4": { name: "Kaos Polo Navy Puma", category: "Pakaian", price: "Rp 420.000", img: "images/product-4.jpg", desc: "Kaos Polo kasual berwarna navy dari Puma dengan potongan reguler yang memberikan tampilan sporty dan rapi." },
+            "5": { name: "Sepatu Casual High Top", category: "Sepatu", price: "Rp 280.000", img: "images/product-5.jpg", desc: "Sepatu santai bertipe high top dengan desain modern yang cocok dipadukan dengan gaya busana streetwear." },
+            "6": { name: "Kaos Polos Black", category: "Pakaian", price: "Rp 95.000", img: "images/product-6.jpg", desc: "Kaos polos hitam berbahan 100% katun combed yang adem, halus, dan nyaman dipakai dalam berbagai kondisi." },
+            "7": { name: "Kaos Kaki Sport 3 in 1", category: "Aksesoris", price: "Rp 45.000", img: "images/product-7.jpg", desc: "Paket 3 pasang kaos kaki olahraga yang mampu menyerap keringat dengan baik dan menjaga kaki tetap nyaman." },
+            "8": { name: "Jam Tangan Analog Black", category: "Aksesoris", price: "Rp 490.000", img: "images/product-8.jpg", desc: "Jam tangan analog pria dengan nuansa hitam maskulin yang kokoh, elegan, dan tahan terhadap cipratan air." },
+            "9": { name: "Jam Tangan Sport Roadster", category: "Aksesoris", price: "Rp 210.000", img: "images/product-9.jpg", desc: "Jam tangan bernuansa sporty khas Roadster dengan strap fleksibel dan tahan lama." },
+            "10": { name: "Sepatu Running Black Red", category: "Sepatu", price: "Rp 530.000", img: "images/product-10.jpg", desc: "Sepatu lari performa tinggi dengan bantalan empuk dan kombinasi warna hitam-merah yang dinamis." },
+            "11": { name: "Sepatu Casual Grey", category: "Sepatu", price: "Rp 310.000", img: "images/product-11.jpg", desc: "Sepatu slip-on kasual berwarna abu-abu yang fleksibel dan sangat praktis untuk digunakan sehari-hari." },
+            "12": { name: "Celana Jogger Black Nike", category: "Pakaian", price: "Rp 175.000", img: "images/product-12.jpg", desc: "Celana jogger hitam elastis Nike yang cocok untuk sesi latihan di gym maupun aktivitas santai." }
+        };
+
+        // Ambil Parameter ID dari URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id') || "1";
+
+        // Jika ID terdeteksi di URL, perbarui konten halaman
+        if (productsData[productId]) {
+            const item = productsData[productId];
+
+            // Update Teks Informasi Produk
+            document.getElementById("productCategory").textContent = "Beranda / " + item.category;
+            document.getElementById("productTitle").textContent = item.name;
+            document.getElementById("productPrice").textContent = item.price;
+            document.getElementById("productDesc").textContent = item.desc;
+
+            // Update Gambar Utama
+            document.getElementById("ProductImg").src = item.img;
+
+            // Sembunyikan galeri kecil jika produk bukan Kaos Printed Red (id != 1)
+            const smallImgRow = document.querySelector(".small-img-row");
+            if (smallImgRow) {
+                if (productId === "1") {
+                    smallImgRow.style.display = "flex";
+                } else {
+                    smallImgRow.style.display = "none";
+                }
+            }
+        }
+
+        // Fungsi Tambah ke Keranjang dengan Verifikasi Login
+        function addToCartAuth() {
+            const userRole = localStorage.getItem("userRole");
+            
+            if (!userRole) {
+                alert("Silakan masuk atau daftar akun terlebih dahulu untuk menambahkan produk ke keranjang belanja!");
+                window.location.href = "account.html";
+            } else {
+                const qtyInput = document.getElementById("productQuantity");
+                const currentQty = qtyInput ? qtyInput.value : 1;
+                window.location.href = `cart.html?add_id=${productId}&qty=${currentQty}`;
+            }
+        }
+
+        // Fungsionalitas Klik Galeri Gambar
         var ProductImg = document.getElementById("ProductImg");
         var SmallImg = document.getElementsByClassName("small-img");
 
-        SmallImg[0].onclick = function () {
-            ProductImg.src = SmallImg[0].src;
-        }
-        SmallImg[1].onclick = function () {
-            ProductImg.src = SmallImg[1].src;
-        }
-        SmallImg[2].onclick = function () {
-            ProductImg.src = SmallImg[2].src;
-        }
-        SmallImg[3].onclick = function () {
-            ProductImg.src = SmallImg[3].src;
+        if (SmallImg.length > 0) {
+            SmallImg[0].onclick = function () { ProductImg.src = SmallImg[0].src; }
+            SmallImg[1].onclick = function () { ProductImg.src = SmallImg[1].src; }
+            SmallImg[2].onclick = function () { ProductImg.src = SmallImg[2].src; }
+            SmallImg[3].onclick = function () { ProductImg.src = SmallImg[3].src; }
         }
     </script>
 </body>

@@ -31,74 +31,39 @@
 
     <!-- Detail Item Keranjang -->
     <div class="small-container cart-page">
-        <table>
-            <tr>
-                <th>Produk</th>
-                <th>Jumlah</th>
-                <th>Subtotal</th>
-            </tr>
-            <tr>
-                <td>
-                    <div class="cart-info">
-                        <img src="images/buy-1.jpg" alt="Kaos Printed Red">
-                        <div>
-                            <p>Kaos Printed Red</p>
-                            <small>Harga: Rp 150.000</small>
-                            <br>
-                            <a href="">Hapus</a>
-                        </div>
-                    </div>
-                </td>
-                <td><input type="number" value="1"></td>
-                <td>Rp 150.000</td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="cart-info">
-                        <img src="images/buy-2.jpg" alt="Sepatu Lari Black HRX">
-                        <div>
-                            <p>Sepatu Lari Black HRX</p>
-                            <small>Harga: Rp 250.000</small>
-                            <br>
-                            <a href="">Hapus</a>
-                        </div>
-                    </div>
-                </td>
-                <td><input type="number" value="1"></td>
-                <td>Rp 250.000</td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="cart-info">
-                        <img src="images/buy-3.jpg" alt="Celana Sweatpants Grey">
-                        <div>
-                            <p>Celana Sweatpants Grey</p>
-                            <small>Harga: Rp 350.000</small>
-                            <br>
-                            <a href="">Hapus</a>
-                        </div>
-                    </div>
-                </td>
-                <td><input type="number" value="1"></td>
-                <td>Rp 350.000</td>
-            </tr>
+        <table id="cartTable">
+            <thead>
+                <tr>
+                    <th>Produk</th>
+                    <th>Jumlah</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody id="cartBody">
+                <!-- Baris keranjang di-render secara dinamis lewat JavaScript -->
+            </tbody>
         </table>
         
         <div class="total-price">
             <table>
                 <tr>
                     <td>Subtotal</td>
-                    <td>Rp 750.000</td>
+                    <td id="subtotalAmount">Rp 0</td>
                 </tr>
                 <tr>
                     <td>Pajak</td>
-                    <td>Rp 75.000</td>
+                    <td id="taxAmount">Rp 0</td>
                 </tr>
                 <tr>
                     <td>Total</td>
-                    <td>Rp 825.000</td>
+                    <td id="totalAmount">Rp 0</td>
                 </tr>
             </table>
+        </div>
+
+        <!-- Tombol Lanjut ke Pembayaran / Checkout -->
+        <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
+            <a href="javascript:void(0);" onclick="proceedToCheckout()" class="btn">Lanjut ke Pembayaran &#8594;</a>
         </div>
     </div>
 
@@ -141,7 +106,7 @@
         </div>
     </div>
 
-    <!-- JavaScript -->
+    <!-- JavaScript Navigation -->
     <script>
         var MenuItems = document.getElementById("MenuItems");
         MenuItems.style.maxHeight = "0px";
@@ -155,6 +120,138 @@
         }
     </script>
 
+    <!-- JavaScript Cart Manager & Delete Handler (Local Storage Support) -->
+    <script>
+        // Check Login Status: Jika belum login, cegah akses keranjang dan alihkan ke account.html
+        const currentUserRole = localStorage.getItem("userRole");
+        if (!currentUserRole) {
+            alert("Silakan masuk atau daftar akun terlebih dahulu untuk mengakses keranjang belanja dan menambahkan produk!");
+            window.location.href = "account.html";
+        }
+
+        // Master Data Produk
+        const productsMaster = {
+            "1": { name: "Kaos Printed Red", price: 150000, img: "images/product-1.jpg" },
+            "2": { name: "Sepatu Lari Black HRX", price: 250000, img: "images/product-2.jpg" },
+            "3": { name: "Celana Sweatpants Grey", price: 350000, img: "images/product-3.jpg" },
+            "4": { name: "Kaos Polo Navy Puma", price: 420000, img: "images/product-4.jpg" },
+            "5": { name: "Sepatu Casual High Top", price: 280000, img: "images/product-5.jpg" },
+            "6": { name: "Kaos Polos Black", price: 95000, img: "images/product-6.jpg" },
+            "7": { name: "Kaos Kaki Sport 3 in 1", price: 45000, img: "images/product-7.jpg" },
+            "8": { name: "Jam Tangan Analog Black", price: 490000, img: "images/product-8.jpg" },
+            "9": { name: "Jam Tangan Sport Roadster", price: 210000, img: "images/product-9.jpg" },
+            "10": { name: "Sepatu Running Black Red", price: 530000, img: "images/product-10.jpg" },
+            "11": { name: "Sepatu Casual Grey", price: 310000, img: "images/product-11.jpg" },
+            "12": { name: "Celana Jogger Black Nike", price: 175000, img: "images/product-12.jpg" }
+        };
+
+        // Ambil data keranjang yang tersimpan di browser, jika kosong default ke []
+        let cartItems = JSON.parse(localStorage.getItem('userCart')) || [];
+
+        // Format angka ke format mata uang Rupiah
+        function formatRupiah(number) {
+            return "Rp " + number.toLocaleString("id-ID");
+        }
+
+        // Ambil Parameter URL saat pengguna mengeklik Tambah ke Keranjang
+        const urlParams = new URLSearchParams(window.location.search);
+        const addId = urlParams.get('add_id');
+        const addQty = parseInt(urlParams.get('qty')) || 1;
+
+        // Jika ada produk ditambahkan dari URL dan pengguna sudah terverifikasi login
+        if (addId && productsMaster[addId] && currentUserRole) {
+            const existingIndex = cartItems.findIndex(item => item.id === addId);
+            if (existingIndex > -1) {
+                cartItems[existingIndex].qty += addQty;
+            } else {
+                cartItems.push({ id: addId, qty: addQty });
+            }
+            // Simpan ke storage dan bersihkan URL parameter
+            localStorage.setItem('userCart', JSON.stringify(cartItems));
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        // Render Ulang Tabel Keranjang
+        function renderCart() {
+            const cartBody = document.getElementById("cartBody");
+            cartBody.innerHTML = "";
+            let subtotalTotal = 0;
+
+            if (cartItems.length === 0) {
+                cartBody.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 20px; color: #777;">Keranjang belanja Anda kosong.</td></tr>';
+                document.getElementById("subtotalAmount").textContent = formatRupiah(0);
+                document.getElementById("taxAmount").textContent = formatRupiah(0);
+                document.getElementById("totalAmount").textContent = formatRupiah(0);
+                return;
+            }
+
+            cartItems.forEach((item, index) => {
+                const prod = productsMaster[item.id];
+                if (!prod) return;
+
+                const itemSubtotal = prod.price * item.qty;
+                subtotalTotal += itemSubtotal;
+
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>
+                        <div class="cart-info">
+                            <img src="${prod.img}" alt="${prod.name}">
+                            <div>
+                                <p>${prod.name}</p>
+                                <small>Harga: ${formatRupiah(prod.price)}</small>
+                                <br>
+                                <a href="javascript:void(0);" onclick="removeItem(${index})" style="color: #ff523b;">Hapus</a>
+                            </div>
+                        </div>
+                    </td>
+                    <td><input type="number" value="${item.qty}" min="1" onchange="updateQty(${index}, this.value)"></td>
+                    <td>${formatRupiah(itemSubtotal)}</td>
+                `;
+                cartBody.appendChild(tr);
+            });
+
+            const tax = subtotalTotal * 0.1;
+            const grandTotal = subtotalTotal + tax;
+
+            document.getElementById("subtotalAmount").textContent = formatRupiah(subtotalTotal);
+            document.getElementById("taxAmount").textContent = formatRupiah(tax);
+            document.getElementById("totalAmount").textContent = formatRupiah(grandTotal);
+        }
+
+        // Fungsi Perbarui Jumlah Item
+        function updateQty(index, newQty) {
+            const qty = parseInt(newQty);
+            if (qty > 0) {
+                cartItems[index].qty = qty;
+            } else {
+                cartItems[index].qty = 1;
+            }
+            localStorage.setItem('userCart', JSON.stringify(cartItems));
+            renderCart();
+        }
+
+        // Fungsi Tombol Hapus Item dari Keranjang
+        function removeItem(index) {
+            cartItems.splice(index, 1);
+            localStorage.setItem('userCart', JSON.stringify(cartItems));
+            renderCart();
+        }
+
+        // Fungsi Validasi Lanjut ke Pembayaran
+        function proceedToCheckout() {
+            if (cartItems.length === 0) {
+                alert("Keranjang belanja Anda masih kosong. Silakan pilih produk terlebih dahulu sebelum melanjutkan ke pembayaran.");
+            } else {
+                window.location.href = "checkout.html";
+            }
+        }
+
+        // Jalankan saat halaman dibuka jika status terautentikasi
+        if (currentUserRole) {
+            renderCart();
+        }
+    </script>
 </body>
 
 </html>

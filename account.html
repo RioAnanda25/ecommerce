@@ -43,17 +43,17 @@
                             <span onclick="register()">Daftar</span>
                             <hr id="Indicator">
                         </div>
-                        <form id="LoginForm">
-                            <input type="text" placeholder="Nama Pengguna">
-                            <input type="password" placeholder="Kata Sandi">
+                        <form id="LoginForm" onsubmit="handleLogin(event)">
+                            <input type="text" id="loginUser" placeholder="Nama Pengguna" required>
+                            <input type="password" id="loginPass" placeholder="Kata Sandi" required>
                             <button type="submit" class="btn">Masuk</button>
                             <a href="">Lupa Kata Sandi?</a>
                         </form>
 
-                        <form id="RegForm">
-                            <input type="text" placeholder="Nama Pengguna">
-                            <input type="email" placeholder="Email">
-                            <input type="password" placeholder="Kata Sandi">
+                        <form id="RegForm" onsubmit="handleRegister(event)">
+                            <input type="text" placeholder="Nama Pengguna" required>
+                            <input type="email" placeholder="Email" required>
+                            <input type="password" placeholder="Kata Sandi" required>
                             <button type="submit" class="btn">Daftar</button>
                         </form>
                     </div>
@@ -131,6 +131,38 @@
             LoginForm.style.transform = "translatex(300px)";
             Indicator.style.transform = "translate(0px)";
 
+        }
+    </script>
+
+    <!-- JavaScript Handling Login & Registration (Role & Password Check) -->
+    <script>
+        // Hapus status login lama saat halaman akun dimuat agar default tidak langsung tersimpan login
+        localStorage.removeItem("userRole");
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById("loginUser").value.trim();
+            const password = document.getElementById("loginPass").value.trim();
+
+            if (username === "admin") {
+                if (password === "admin") {
+                    localStorage.setItem("userRole", "admin");
+                    alert("Login berhasil sebagai Admin!");
+                    window.location.href = "admin.html";
+                } else {
+                    alert("Kata sandi salah! Silakan periksa kembali kata sandi Anda.");
+                }
+            } else {
+                localStorage.setItem("userRole", "customer");
+                alert("Login berhasil sebagai Pelanggan!");
+                window.location.href = "index.html";
+            }
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            alert("Pendaftaran berhasil! Silakan masuk menggunakan akun Anda.");
+            login();
         }
     </script>
 

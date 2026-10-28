@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembayaran & Checkout | Sistem E-Commerce</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <div class="container">
+        <div class="navbar" style="display: flex; align-items: center;">
+            <div class="logo">
+                <a href="index.html"><img src="images/online-shop.png" alt="logo" width="65px"></a>
+            </div>
+            <nav>
+                <ul id="MenuItems" style="margin: 0; padding: 0;">
+                    <li><a href="index.html">Beranda</a></li>
+                    <li><a href="products.html">Produk & Stok</a></li>
+                    <li><a href="account.html">Akun</a></li>
+                </ul>
+            </nav>
+            <a href="cart.html"><img src="images/cart.png" width="30px" height="30px" alt="Keranjang"></a>
+            <img src="images/menu.png" class="menu-icon" onclick="menutoggle()" alt="Menu Toggle">
+        </div>
+    </div>
+
+    <!-- Area Checkout & Pembayaran VA -->
+    <div class="small-container" style="margin-top: 40px; margin-bottom: 50px;">
+        <h2 class="title">Pembayaran Virtual Account (VA)</h2>
+
+        <div class="row" style="align-items: flex-start; gap: 30px;">
+            <!-- Form Pemilihan Bank VA -->
+            <div class="col-2" style="background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
+                <h3>Pilih Bank Virtual Account</h3>
+                <hr style="margin: 15px 0;">
+
+                <form id="paymentForm" onsubmit="generateVA(event)">
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 500;">Metode Pembayaran:</label>
+                        <select id="bankSelect" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; outline: none;" required>
+                            <option value="">-- Pilih Bank --</option>
+                            <option value="BCA">BCA Virtual Account</option>
+                            <option value="Mandiri">Mandiri Virtual Account</option>
+                            <option value="BNI">BNI Virtual Account</option>
+                            <option value="BRI">BRI Virtual Account</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn" style="width: 100%; text-align: center; border: none; cursor: pointer;">Buat Nomor VA &#8594;</button>
+                </form>
+
+                <!-- Box Tampilan Nomor VA (Tersembunyi Awalnya) -->
+                <div id="vaResultBox" style="display: none; margin-top: 25px; background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px dashed #ff523b;">
+                    <h4 style="color: #ff523b; margin-bottom: 10px;">Instruksi Pembayaran</h4>
+                    <p style="font-size: 14px;">Bank: <strong id="selectedBankName">-</strong></p>
+                    <p style="font-size: 14px; margin-top: 5px;">Nomor Virtual Account:</p>
+                    <div style="font-size: 20px; font-weight: bold; letter-spacing: 2px; color: #333; margin: 10px 0;" id="vaNumberDisplay">880123456789</div>
+                    <p style="font-size: 12px; color: #666;">Segera lakukan pembayaran sebelum batas waktu berakhir.</p>
+
+                    <button onclick="confirmPayment()" class="btn" style="width: 100%; margin-top: 15px; background: #28a745; text-align: center; border: none; cursor: pointer;">Konfirmasi Pembayaran</button>
+                </div>
+            </div>
+
+            <!-- Ringkasan Total Tagihan -->
+            <div class="col-2" style="background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
+                <h3>Ringkasan Pesanan</h3>
+                <hr style="margin: 15px 0;">
+
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span>Subtotal:</span>
+                    <strong id="summarySubtotal">Rp 0</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span>Pajak (10%):</span>
+                    <strong id="summaryTax">Rp 0</strong>
+                </div>
+                <hr style="margin: 15px 0;">
+                <div style="display: flex; justify-content: space-between; font-size: 18px; color: #ff523b;">
+                    <span>Total Pembayaran:</span>
+                    <strong id="summaryTotal">Rp 0</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="footer-col-1">
+                    <h3>Unduh Aplikasi</h3>
+                    <p>Tersedia untuk smartphone Android dan iOS.</p>
+                    <div class="app-logo">
+                        <img src="images/play-store.png" alt="Play Store">
+                        <img src="images/app-store.png" alt="App Store">
+                    </div>
+                </div>
+                <div class="footer-col-2">
+                    <img src="images/online-shop.png" alt="Logo White">
+                    <p>Sistem E-Commerce Terpercaya untuk Kebutuhan Belanja Anda.</p>
+                </div>
+                <div class="footer-col-3">
+                    <h3>Layanan</h3>
+                    <ul>
+                        <li>Produk & Stok</li>
+                        <li>Shopping Cart</li>
+                        <li>Konfirmasi Pembayaran</li>
+                        <li>Lacak Resi</li>
+                    </ul>
+                </div>
+                <div class="footer-col-4">
+                    <h3>Ikuti Kami</h3>
+                    <ul>
+                        <li>Facebook</li>
+                        <li>Instagram</li>
+                        <li>Twitter</li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <p class="copyright">Copyright 2026 - E-Commerce System</p>
+        </div>
+    </div>
+
+    <!-- JavaScript Navigation & Payment Handler -->
+    <script>
+        var MenuItems = document.getElementById("MenuItems");
+        MenuItems.style.maxHeight = "0px";
+        function menutoggle() {
+            if (MenuItems.style.maxHeight == "0px") {
+                MenuItems.style.maxHeight = "200px";
+            } else {
+                MenuItems.style.maxHeight = "0px";
+            }
+        }
+
+        // Master Data Produk
+        const productsMaster = {
+            "1": { name: "Kaos Printed Red", price: 150000 },
+            "2": { name: "Sepatu Lari Black HRX", price: 250000 },
+            "3": { name: "Celana Sweatpants Grey", price: 350000 },
+            "4": { name: "Kaos Polo Navy Puma", price: 420000 },
+            "5": { name: "Sepatu Casual High Top", price: 280000 },
+            "6": { name: "Kaos Polos Black", price: 95000 },
+            "7": { name: "Kaos Kaki Sport 3 in 1", price: 45000 },
+            "8": { name: "Jam Tangan Analog Black", price: 490000 },
+            "9": { name: "Jam Tangan Sport Roadster", price: 210000 },
+            "10": { name: "Sepatu Running Black Red", price: 530000 },
+            "11": { name: "Sepatu Casual Grey", price: 310000 },
+            "12": { name: "Celana Jogger Black Nike", price: 175000 }
+        };
+
+        function formatRupiah(number) {
+            return "Rp " + number.toLocaleString("id-ID");
+        }
+
+        // Hitung Ringkasan dari Keranjang
+        const cartItems = JSON.parse(localStorage.getItem('userCart')) || [];
+        let subtotalTotal = 0;
+
+        cartItems.forEach(item => {
+            const prod = productsMaster[item.id];
+            if (prod) {
+                subtotalTotal += prod.price * item.qty;
+            }
+        });
+
+        const tax = subtotalTotal * 0.1;
+        const grandTotal = subtotalTotal + tax;
+
+        document.getElementById("summarySubtotal").textContent = formatRupiah(subtotalTotal);
+        document.getElementById("summaryTax").textContent = formatRupiah(tax);
+        document.getElementById("summaryTotal").textContent = formatRupiah(grandTotal);
+
+        // Generator Nomor VA Demo
+        function generateVA(e) {
+            e.preventDefault();
+            const bank = document.getElementById("bankSelect").value;
+            if (!bank) return;
+
+            const bankCodes = { "BCA": "8808", "Mandiri": "8908", "BNI": "8810", "BRI": "8811" };
+            const randomDigits = Math.floor(1000000000 + Math.random() * 9000000000);
+            const vaNumber = bankCodes[bank] + randomDigits;
+
+            document.getElementById("selectedBankName").textContent = bank + " Virtual Account";
+            document.getElementById("vaNumberDisplay").textContent = vaNumber;
+            document.getElementById("vaResultBox").style.display = "block";
+        }
+
+        // Simulasi Konfirmasi Pembayaran & Pembuatan Resi
+        function confirmPayment() {
+            const randomResi = "RESI-" + Math.floor(10000000 + Math.random() * 90000000);
+            alert("Pembayaran Berhasil Dikirim!\n\nNomor Resi Anda: " + randomResi + "\n\nTerima kasih telah berbelanja.");
+            
+            // Kosongkan Keranjang Belanja
+            localStorage.removeItem('userCart');
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+
+</html>
