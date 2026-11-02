@@ -72,13 +72,8 @@
             <div class="col-4">
                 <a href="product_details.html?id=1"><img src="images/product-1.jpg" alt="Kaos Printed Red"></a>
                 <h4>Kaos Printed Red</h4>
-                <div class="rating">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star-o"></i>
-                    <span>(4.0)</span>
+                <div class="rating" id="rating-PRD-1">
+                    <span style="font-size: 13px; color: #777; font-style: italic;">(Belum ada ulasan)</span>
                 </div>
                 <p>Rp 150.000 <small>| Stok: 15</small></p>
             </div>
@@ -86,13 +81,8 @@
             <div class="col-4">
                 <a href="product_details.html?id=2"><img src="images/product-2.jpg" alt="Sepatu Lari Black HRX"></a>
                 <h4>Sepatu Lari Black HRX</h4>
-                <div class="rating">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <span>(5.0)</span>
+                <div class="rating" id="rating-PRD-2">
+                    <span style="font-size: 13px; color: #777; font-style: italic;">(Belum ada ulasan)</span>
                 </div>
                 <p>Rp 250.000 <small>| Stok: 8</small></p>
             </div>
@@ -100,13 +90,8 @@
             <div class="col-4">
                 <a href="product_details.html?id=3"><img src="images/product-3.jpg" alt="Celana Sweatpants Grey"></a>
                 <h4>Celana Sweatpants Grey</h4>
-                <div class="rating">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star-half-o"></i>
-                    <span>(4.5)</span>
+                <div class="rating" id="rating-PRD-3">
+                    <span style="font-size: 13px; color: #777; font-style: italic;">(Belum ada ulasan)</span>
                 </div>
                 <p>Rp 350.000 <small>| Stok: 20</small></p>
             </div>
@@ -114,13 +99,8 @@
             <div class="col-4">
                 <a href="product_details.html?id=4"><img src="images/product-4.jpg" alt="Kaos Polo Navy Puma"></a>
                 <h4>Kaos Polo Navy Puma</h4>
-                <div class="rating">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star-o"></i>
-                    <span>(4.2)</span>
+                <div class="rating" id="rating-PRD-4">
+                    <span style="font-size: 13px; color: #777; font-style: italic;">(Belum ada ulasan)</span>
                 </div>
                 <p>Rp 420.000 <small>| Stok: 5</small></p>
             </div>
@@ -144,12 +124,12 @@
         </div>
     </div>
 
-    <!-- FITUR: Ulasan & Rating dari Pelanggan (Render Dinamis Berdasarkan Moderasi Admin) -->
+    <!-- FITUR: Ulasan & Rating dari Pelanggan (Hanya 3 Testimoni Utama Beranda) -->
     <div class="testimonial">
         <div class="small-container">
             <h2 class="title">Ulasan Pelanggan</h2>
             <div class="row" id="testimonialContainer">
-                <!-- Data ulasan yang berstatus 'Ditampilkan' dirender dinamis via JavaScript -->
+                <!-- Data ulasan beranda dirender maksimal 3 item via JavaScript -->
             </div>
         </div>
     </div>
@@ -205,38 +185,73 @@
             }
         }
 
-        // Render Ulasan Pelanggan Secara Dinamis Mengikuti Moderasi Admin
+        // Helper Render Bintang Rating
+        function generateStarHTML(ratingNum) {
+            let html = "";
+            const fullStars = Math.floor(ratingNum);
+            const hasHalfStar = (ratingNum % 1) >= 0.5;
+
+            for (let i = 1; i <= 5; i++) {
+                if (i <= fullStars) {
+                    html += '<i class="fa fa-star"></i>';
+                } else if (i === fullStars + 1 && hasHalfStar) {
+                    html += '<i class="fa fa-star-half-o"></i>';
+                } else {
+                    html += '<i class="fa fa-star-o"></i>';
+                }
+            }
+            html += ` <span>(${ratingNum.toFixed(1)})</span>`;
+            return html;
+        }
+
+        // Sync Rating Produk Unggulan Sesuai database adminReviews
+        function updateFeaturedProductsRating() {
+            const storedReviews = localStorage.getItem("adminReviews");
+            const reviews = storedReviews ? JSON.parse(storedReviews) : [];
+            
+            const featuredProducts = [
+                { id: "1", name: "Kaos Printed Red" },
+                { id: "2", name: "Sepatu Lari Black HRX" },
+                { id: "3", name: "Celana Sweatpants Grey" },
+                { id: "4", name: "Kaos Polo Navy Puma" }
+            ];
+
+            featuredProducts.forEach(prod => {
+                const ratingContainer = document.getElementById("rating-PRD-" + prod.id);
+                if (!ratingContainer) return;
+
+                const matchedReviews = reviews.filter(r => r.product === prod.name && (r.status === "Ditampilkan" || !r.status));
+
+                if (matchedReviews.length > 0) {
+                    const avgRating = matchedReviews.reduce((sum, r) => sum + Number(r.rating || 5), 0) / matchedReviews.length;
+                    ratingContainer.innerHTML = generateStarHTML(avgRating);
+                } else {
+                    ratingContainer.innerHTML = '<span style="font-size: 13px; color: #777; font-style: italic;">(Belum ada ulasan)</span>';
+                }
+            });
+        }
+
+        // Render Ulasan Pelanggan Secara Khusus untuk Beranda (Maksimal 3 Ulasan Utama)
         function renderTestimonials() {
             const container = document.getElementById("testimonialContainer");
             if (!container) return;
 
-            // Default ulasan awal
-            const defaultReviews = [
-                { id: 1, customer: "Sean Parker", product: "Kaos Printed Red", rating: 5.0, review: "Proses pemesanan sangat cepat, checkout dengan perhitungan total otomatis sangat membantu!", status: "Ditampilkan" },
-                { id: 2, customer: "Mike Smith", product: "Sepatu Lari Black HRX", rating: 5.0, review: "Konfirmasi pembayaran via gateway bekerja secara instan. Nomor resi langsung muncul.", status: "Ditampilkan" }
+            // 3 Ulasan default khusus tampilan beranda
+            const defaultHomeTestimonials = [
+                { id: 1, customer: "Sean Parker", rating: 5.0, review: "Proses pemesanan sangat cepat, checkout dengan perhitungan total otomatis sangat membantu!" },
+                { id: 2, customer: "Mike Smith", rating: 5.0, review: "Konfirmasi pembayaran via gateway bekerja secara instan. Nomor resi langsung muncul." },
+                { id: 3, customer: "Mabel Johnson", rating: 4.5, review: "Kualitas produk sangat bagus dan sesuai deskripsi. Pelayanan customer service ramah." }
             ];
-
-            const stored = localStorage.getItem("adminReviews");
-            const reviews = stored ? JSON.parse(stored) : defaultReviews;
-
-            // Hanya filter ulasan yang berstatus "Ditampilkan" oleh Admin
-            const visibleReviews = reviews.filter(r => r.status === "Ditampilkan");
 
             container.innerHTML = "";
 
-            if (visibleReviews.length === 0) {
-                container.innerHTML = `<p style="text-align: center; width: 100%; color: #777;">Belum ada ulasan yang ditampilkan.</p>`;
-                return;
-            }
-
-            visibleReviews.forEach((r, idx) => {
+            // Selalu tampilkan tepat 3 testimoni agar tampilan beranda rapi
+            defaultHomeTestimonials.slice(0, 3).forEach((r, idx) => {
                 const col = document.createElement("div");
                 col.className = "col-3";
 
-                // Pilihan gambar avatar secara acak/berurutan
                 const userImg = (idx % 2 === 0) ? "images/user-1.png" : "images/user-2.png";
 
-                // Hitung bintang rating
                 let starsHtml = "";
                 const fullStars = Math.floor(r.rating);
                 for (let i = 0; i < 5; i++) {
@@ -260,8 +275,11 @@
             });
         }
 
-        // Muat ulasan saat halaman dimuat
-        window.addEventListener("DOMContentLoaded", renderTestimonials);
+        // Muat ulasan dan update rating saat halaman dimuat
+        window.addEventListener("DOMContentLoaded", () => {
+            updateFeaturedProductsRating();
+            renderTestimonials();
+        });
     </script>
 
 </body>

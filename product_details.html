@@ -33,7 +33,7 @@
     <div class="small-container single-product">
         <div class="row">
             <div class="col-2">
-                <img src="images/product-1.jpg" width="100%" id="ProductImg" alt="Gambar Utama Produk">
+                <img src="images/product-1.jpg" width="100%" id="ProductImg" alt="Gambar Utama Produk" onerror="this.src='images/product-1.jpg'">
 
                 <div class="small-img-row">
                     <div class="small-img-col">
@@ -88,50 +88,34 @@
     <div class="small-container">
         <div class="row">
             <div class="col-4">
-                <a href="product_details.html?id=9"><img src="images/product-9.jpg" alt="Jam Tangan Sport"></a>
+                <a href="product_details.html?id=PRD-9"><img src="images/product-9.jpg" alt="Jam Tangan Sport"></a>
                 <h4>Jam Tangan Sport Roadster</h4>
-                <div class="rating">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star-o"></i>
+                <div class="rating" id="rating-PRD-9">
+                    <span style="font-size: 13px; color: #777; font-style: italic;">(Belum ada ulasan)</span>
                 </div>
                 <p>Rp 210.000</p>
             </div>
             <div class="col-4">
-                <a href="product_details.html?id=10"><img src="images/product-10.jpg" alt="Sepatu Running Black Red"></a>
+                <a href="product_details.html?id=PRD-10"><img src="images/product-10.jpg" alt="Sepatu Running Black Red"></a>
                 <h4>Sepatu Running Black Red</h4>
-                <div class="rating">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
+                <div class="rating" id="rating-PRD-10">
+                    <span style="font-size: 13px; color: #777; font-style: italic;">(Belum ada ulasan)</span>
                 </div>
                 <p>Rp 530.000</p>
             </div>
             <div class="col-4">
-                <a href="product_details.html?id=11"><img src="images/product-11.jpg" alt="Sepatu Casual Grey"></a>
+                <a href="product_details.html?id=PRD-11"><img src="images/product-11.jpg" alt="Sepatu Casual Grey"></a>
                 <h4>Sepatu Casual Grey</h4>
-                <div class="rating">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star-o"></i>
-                    <i class="fa fa-star-o"></i>
+                <div class="rating" id="rating-PRD-11">
+                    <span style="font-size: 13px; color: #777; font-style: italic;">(Belum ada ulasan)</span>
                 </div>
                 <p>Rp 310.000</p>
             </div>
             <div class="col-4">
-                <a href="product_details.html?id=12"><img src="images/product-12.jpg" alt="Celana Jogger Black"></a>
+                <a href="product_details.html?id=PRD-12"><img src="images/product-12.jpg" alt="Celana Jogger Black"></a>
                 <h4>Celana Jogger Black Nike</h4>
-                <div class="rating">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star-o"></i>
+                <div class="rating" id="rating-PRD-12">
+                    <span style="font-size: 13px; color: #777; font-style: italic;">(Belum ada ulasan)</span>
                 </div>
                 <p>Rp 175.000</p>
             </div>
@@ -177,7 +161,7 @@
         </div>
     </div>
 
-    <!-- JavaScript -->
+    <!-- JavaScript Navigation -->
     <script>
         var MenuItems = document.getElementById("MenuItems");
         MenuItems.style.maxHeight = "0px";
@@ -193,73 +177,94 @@
 
     <!-- Dynamic Product Details & Gallery JavaScript -->
     <script>
-        // Data Produk Lengkap
-        const productsData = {
-            "1": { name: "Kaos Printed Red", category: "Pakaian", price: "Rp 150.000", img: "images/product-1.jpg", desc: "Tingkatkan gaya pakaian musim panas Anda dengan Kaos Puma Men's Active. Padukan dengan celana pendek untuk olahraga pagi Anda atau celana denim untuk bersantai di sore hari bersama teman-teman." },
-            "2": { name: "Sepatu Lari Black HRX", category: "Sepatu", price: "Rp 250.000", img: "images/product-2.jpg", desc: "Sepatu lari berbahan ringan dan breathable dengan daya cengkeram optimal untuk kenyamanan berlari sehari-hari." },
-            "3": { name: "Celana Sweatpants Grey", category: "Pakaian", price: "Rp 350.000", img: "images/product-3.jpg", desc: "Celana sweatpants kasual berkualitas tinggi, sangat nyaman digunakan untuk santai maupun olahraga ringan." },
-            "4": { name: "Kaos Polo Navy Puma", category: "Pakaian", price: "Rp 420.000", img: "images/product-4.jpg", desc: "Kaos Polo kasual berwarna navy dari Puma dengan potongan reguler yang memberikan tampilan sporty dan rapi." },
-            "5": { name: "Sepatu Casual High Top", category: "Sepatu", price: "Rp 280.000", img: "images/product-5.jpg", desc: "Sepatu santai bertipe high top dengan desain modern yang cocok dipadukan dengan gaya busana streetwear." },
-            "6": { name: "Kaos Polos Black", category: "Pakaian", price: "Rp 95.000", img: "images/product-6.jpg", desc: "Kaos polos hitam berbahan 100% katun combed yang adem, halus, dan nyaman dipakai dalam berbagai kondisi." },
-            "7": { name: "Kaos Kaki Sport 3 in 1", category: "Aksesoris", price: "Rp 45.000", img: "images/product-7.jpg", desc: "Paket 3 pasang kaos kaki olahraga yang mampu menyerap keringat dengan baik dan menjaga kaki tetap nyaman." },
-            "8": { name: "Jam Tangan Analog Black", category: "Aksesoris", price: "Rp 490.000", img: "images/product-8.jpg", desc: "Jam tangan analog pria dengan nuansa hitam maskulin yang kokoh, elegan, dan tahan terhadap cipratan air." },
-            "9": { name: "Jam Tangan Sport Roadster", category: "Aksesoris", price: "Rp 210.000", img: "images/product-9.jpg", desc: "Jam tangan bernuansa sporty khas Roadster dengan strap fleksibel dan tahan lama." },
-            "10": { name: "Sepatu Running Black Red", category: "Sepatu", price: "Rp 530.000", img: "images/product-10.jpg", desc: "Sepatu lari performa tinggi dengan bantalan empuk dan kombinasi warna hitam-merah yang dinamis." },
-            "11": { name: "Sepatu Casual Grey", category: "Sepatu", price: "Rp 310.000", img: "images/product-11.jpg", desc: "Sepatu slip-on kasual berwarna abu-abu yang fleksibel dan sangat praktis untuk digunakan sehari-hari." },
-            "12": { name: "Celana Jogger Black Nike", category: "Pakaian", price: "Rp 175.000", img: "images/product-12.jpg", desc: "Celana jogger hitam elastis Nike yang cocok untuk sesi latihan di gym maupun aktivitas santai." }
+        // Data Produk Bawaan/Default (Bila localStorage belum diinisialisasi)
+        const defaultProductsData = {
+            "1": { name: "Kaos Printed Red", category: "Pakaian", price: "Rp 150.000", img: "images/product-1.jpg", sizes: "S, M, L, XL, XXL", desc: "Tingkatkan gaya pakaian musim panas Anda dengan Kaos Puma Men's Active. Padukan dengan celana pendek untuk olahraga pagi Anda atau celana denim untuk bersantai di sore hari bersama teman-teman." },
+            "2": { name: "Sepatu Lari Black HRX", category: "Sepatu", price: "Rp 250.000", img: "images/product-2.jpg", sizes: "39, 40, 41, 42, 43, 44", desc: "Sepatu lari berbahan ringan dan breathable dengan daya cengkeram optimal untuk kenyamanan berlari sehari-hari." },
+            "3": { name: "Celana Sweatpants Grey", category: "Pakaian", price: "Rp 350.000", img: "images/product-3.jpg", sizes: "M, L, XL", desc: "Celana sweatpants kasual berkualitas tinggi, sangat nyaman digunakan untuk santai maupun olahraga ringan." },
+            "4": { name: "Kaos Polo Navy Puma", category: "Pakaian", price: "Rp 420.000", img: "images/product-4.jpg", sizes: "S, M, L, XL", desc: "Kaos Polo kasual berwarna navy dari Puma dengan potongan reguler yang memberikan tampilan sporty dan rapi." },
+            "5": { name: "Sepatu Casual High Top", category: "Sepatu", price: "Rp 280.000", img: "images/product-5.jpg", sizes: "40, 41, 42, 43", desc: "Sepatu santai bertipe high top dengan desain modern yang cocok dipadukan dengan gaya busana streetwear." },
+            "6": { name: "Kaos Polos Black", category: "Pakaian", price: "Rp 95.000", img: "images/product-6.jpg", sizes: "S, M, L, XL, XXL", desc: "Kaos polos hitam berbahan 100% katun combed yang adem, halus, dan nyaman dipakai dalam berbagai kondisi." },
+            "7": { name: "Kaos Kaki Sport 3 in 1", category: "Aksesoris", price: "Rp 45.000", img: "images/product-7.jpg", sizes: "All Size", desc: "Paket 3 pasang kaos kaki olahraga yang mampu menyerap keringat dengan baik dan menjaga kaki tetap nyaman." },
+            "8": { name: "Jam Tangan Analog Black", category: "Aksesoris", price: "Rp 490.000", img: "images/product-8.jpg", sizes: "All Size", desc: "Jam tangan analog pria dengan nuansa hitam maskulin yang kokoh, elegan, dan tahan terhadap cipratan air." },
+            "9": { name: "Jam Tangan Sport Roadster", category: "Aksesoris", price: "Rp 210.000", img: "images/product-9.jpg", sizes: "All Size", desc: "Jam tangan bernuansa sporty khas Roadster dengan strap fleksibel dan tahan lama." },
+            "10": { name: "Sepatu Running Black Red", category: "Sepatu", price: "Rp 530.000", img: "images/product-10.jpg", sizes: "39, 40, 41, 42, 43", desc: "Sepatu lari performa tinggi dengan bantalan empuk dan kombinasi warna hitam-merah yang dinamis." },
+            "11": { name: "Sepatu Casual Grey", category: "Sepatu", price: "Rp 310.000", img: "images/product-11.jpg", sizes: "40, 41, 42", desc: "Sepatu slip-on kasual berwarna abu-abu yang fleksibel dan sangat praktis untuk digunakan sehari-hari." },
+            "12": { name: "Celana Jogger Black Nike", category: "Pakaian", price: "Rp 175.000", img: "images/product-12.jpg", sizes: "M, L, XL", desc: "Celana jogger hitam elastis Nike yang cocok untuk sesi latihan di gym maupun aktivitas santai." }
         };
 
         // Ambil Parameter ID dari URL
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('id') || "1";
 
-        // Jika ID terdeteksi di URL, perbarui konten halaman
-        if (productsData[productId]) {
-            const item = productsData[productId];
+        function formatRupiah(num) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num);
+        }
 
-            // Update Teks Informasi Produk
+        // Fungsi Memuat Data Produk Dinamis dari localStorage / Default
+        function getProductDetailItem(id) {
+            const stored = localStorage.getItem("adminProducts");
+            if (stored) {
+                const productsArray = JSON.parse(stored);
+                const found = productsArray.find(p => String(p.id) === String(id) || String(p.id).replace("PRD-", "") === String(id).replace("PRD-", ""));
+                if (found) {
+                    return {
+                        id: found.id,
+                        name: found.name,
+                        category: found.category,
+                        price: typeof found.price === 'number' ? formatRupiah(found.price) : found.price,
+                        img: found.img,
+                        sizes: found.sizes !== undefined ? found.sizes : "",
+                        desc: found.desc || `Produk ${found.name} berkualitas tinggi kategori ${found.category}. Sangat nyaman dan cocok untuk melengkapi kebutuhan harian Anda.`
+                    };
+                }
+            }
+
+            const cleanKey = String(id).replace("PRD-", "");
+            const defItem = defaultProductsData[cleanKey] || defaultProductsData["1"];
+            return {
+                id: `PRD-${cleanKey}`,
+                name: defItem.name,
+                category: defItem.category,
+                price: defItem.price,
+                img: defItem.img,
+                sizes: defItem.sizes || "",
+                desc: defItem.desc
+            };
+        }
+
+        const item = getProductDetailItem(productId);
+
+        if (item) {
             document.getElementById("productCategory").textContent = "Beranda / " + item.category;
             document.getElementById("productTitle").textContent = item.name;
             document.getElementById("productPrice").textContent = item.price;
             document.getElementById("productDesc").textContent = item.desc;
-
-            // Update Gambar Utama
             document.getElementById("ProductImg").src = item.img;
 
-            // Penyesuaian Ukuran Berdasarkan Kategori Produk
             const sizeSelect = document.getElementById("sizeSelect");
             if (sizeSelect) {
-                if (item.category === "Sepatu") {
-                    sizeSelect.style.display = "inline-block";
-                    sizeSelect.innerHTML = `
-                        <option>Pilih Ukuran Sepatu</option>
-                        <option>39</option>
-                        <option>40</option>
-                        <option>41</option>
-                        <option>42</option>
-                        <option>43</option>
-                        <option>44</option>
-                    `;
-                } else if (item.category === "Pakaian") {
-                    sizeSelect.style.display = "inline-block";
-                    sizeSelect.innerHTML = `
-                        <option>Pilih Ukuran Pakaian</option>
-                        <option>XXL</option>
-                        <option>XL</option>
-                        <option>L</option>
-                        <option>M</option>
-                        <option>S</option>
-                    `;
-                } else {
-                    // Sembunyikan pilihan ukuran untuk Aksesoris (seperti Jam Tangan)
+                const cleanSizes = (item.sizes || "").trim();
+                const invalidValues = ["", "-", "No Size", "Tidak Ada Ukuran"];
+
+                // Jika di Admin diisi kosong / No Size / "-", sembunyikan dropdown ukuran
+                if (invalidValues.includes(cleanSizes)) {
                     sizeSelect.style.display = "none";
+                } else {
+                    const sizeArray = cleanSizes.split(",").map(s => s.trim());
+                    sizeSelect.style.display = "inline-block";
+                    let optionsHTML = `<option>Pilih Ukuran</option>`;
+                    sizeArray.forEach(sz => {
+                        if (sz) optionsHTML += `<option>${sz}</option>`;
+                    });
+                    sizeSelect.innerHTML = optionsHTML;
                 }
             }
 
-            // Sembunyikan galeri kecil jika produk bukan Kaos Printed Red (id != 1)
             const smallImgRow = document.querySelector(".small-img-row");
             if (smallImgRow) {
-                if (productId === "1") {
+                const cleanId = String(productId).replace("PRD-", "");
+                if (cleanId === "1") {
                     smallImgRow.style.display = "flex";
                 } else {
                     smallImgRow.style.display = "none";
@@ -267,21 +272,30 @@
             }
         }
 
-        // Fungsi Tambah ke Keranjang dengan Verifikasi Login
         function addToCartAuth() {
             const userRole = localStorage.getItem("userRole");
             
             if (!userRole) {
                 alert("Silakan masuk atau daftar akun terlebih dahulu untuk menambahkan produk ke keranjang belanja!");
                 window.location.href = "account.html";
-            } else {
-                const qtyInput = document.getElementById("productQuantity");
-                const currentQty = qtyInput ? qtyInput.value : 1;
-                window.location.href = `cart.html?add_id=${productId}&qty=${currentQty}`;
+                return;
             }
+
+            const sizeSelect = document.getElementById("sizeSelect");
+            if (sizeSelect && sizeSelect.style.display !== "none") {
+                const selectedSize = sizeSelect.value;
+                if (!selectedSize || selectedSize.toLowerCase().includes("pilih")) {
+                    alert("Silakan pilih ukuran terlebih dahulu sebelum menambahkan ke keranjang!");
+                    sizeSelect.focus();
+                    return;
+                }
+            }
+
+            const qtyInput = document.getElementById("productQuantity");
+            const currentQty = qtyInput ? qtyInput.value : 1;
+            window.location.href = `cart.html?add_id=${productId}&qty=${currentQty}`;
         }
 
-        // Fungsionalitas Klik Galeri Gambar
         var ProductImg = document.getElementById("ProductImg");
         var SmallImg = document.getElementsByClassName("small-img");
 
@@ -291,6 +305,53 @@
             SmallImg[2].onclick = function () { ProductImg.src = SmallImg[2].src; }
             SmallImg[3].onclick = function () { ProductImg.src = SmallImg[3].src; }
         }
+
+        // Helper Render Bintang Rating
+        function generateStarHTML(ratingNum) {
+            let html = "";
+            const fullStars = Math.floor(ratingNum);
+            const hasHalfStar = (ratingNum % 1) >= 0.5;
+
+            for (let i = 1; i <= 5; i++) {
+                if (i <= fullStars) {
+                    html += '<i class="fa fa-star"></i>';
+                } else if (i === fullStars + 1 && hasHalfStar) {
+                    html += '<i class="fa fa-star-half-o"></i>';
+                } else {
+                    html += '<i class="fa fa-star-o"></i>';
+                }
+            }
+            return html;
+        }
+
+        // Synchronize Related Products Rating persis seperti di products.html
+        function updateRelatedProductsRating() {
+            const storedReviews = localStorage.getItem("adminReviews");
+            const reviews = storedReviews ? JSON.parse(storedReviews) : [];
+            const relatedProductIds = ["PRD-9", "PRD-10", "PRD-11", "PRD-12"];
+
+            relatedProductIds.forEach(pId => {
+                const pItem = getProductDetailItem(pId);
+                const ratingContainer = document.getElementById("rating-" + pId);
+
+                if (!ratingContainer || !pItem) return;
+
+                // Cari ulasan riil pembeli berdasarkan nama produk
+                const matchedReviews = reviews.filter(r => r.product === pItem.name && (r.status === "Ditampilkan" || !r.status));
+
+                if (matchedReviews.length > 0) {
+                    const avgRating = matchedReviews.reduce((sum, r) => sum + Number(r.rating || 5), 0) / matchedReviews.length;
+                    ratingContainer.innerHTML = generateStarHTML(avgRating);
+                } else {
+                    // Tampilkan Teks Belum Ada Ulasan jika belum ada ulasan di database
+                    ratingContainer.innerHTML = '<span style="font-size: 13px; color: #777; font-style: italic;">(Belum ada ulasan)</span>';
+                }
+            });
+        }
+
+        // Eksekusi fungsi update secara langsung saat script atau window selesai memuat
+        updateRelatedProductsRating();
+        window.addEventListener("load", updateRelatedProductsRating);
     </script>
 </body>
 

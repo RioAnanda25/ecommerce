@@ -9,6 +9,62 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        /* Styling Tabel Riwayat Pesanan & Modal Ulasan */
+        .order-history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .order-history-table th, .order-history-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+            font-size: 14px;
+        }
+        .order-history-table th {
+            background: #ff523b;
+            color: #fff;
+        }
+        .badge-success { background: #28a745; color: white; padding: 3px 8px; border-radius: 4px; font-size: 12px; }
+        .badge-warning { background: #ffc107; color: #333; padding: 3px 8px; border-radius: 4px; font-size: 12px; }
+        .btn-action { padding: 5px 10px; background: #ff523b; color: white; border-radius: 4px; text-decoration: none; font-size: 12px; border: none; cursor: pointer; }
+        .btn-action-edit { padding: 5px 10px; background: #007bff; color: white; border-radius: 4px; text-decoration: none; font-size: 12px; border: none; cursor: pointer; }
+        
+        /* Modal Popup Rating */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 25px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        .close-btn { position: absolute; right: 20px; top: 15px; font-size: 24px; font-weight: bold; color: #aaa; cursor: pointer; }
+        .close-btn:hover { color: #ff523b; }
+        .star-rating {
+            font-size: 30px;
+            color: #ccc;
+            cursor: pointer;
+            margin: 15px 0;
+        }
+        .star-rating .fa-star.active {
+            color: #ff523b;
+        }
+    </style>
 </head>
 
 <body>
@@ -60,14 +116,59 @@
                     </div>
 
                     <!-- Profile & Logout Container (Tampil Saat Sudah Login) -->
-                    <div class="form-container" id="loggedInContainer" style="display: none; text-align: center; padding: 40px 20px;">
+                    <div class="form-container" id="loggedInContainer" style="display: none; text-align: center; padding: 30px 20px; height: auto;">
                         <i class="fa fa-user-circle" style="font-size: 70px; color: #ff523b; margin-bottom: 15px;"></i>
                         <h2 style="margin-bottom: 5px;">Halo, <span id="displayUsername">Pengguna</span>!</h2>
-                        <p style="color: #555; margin-bottom: 25px;">Anda telah berhasil masuk ke akun Anda.</p>
+                        <p style="color: #555; margin-bottom: 20px;">Anda telah berhasil masuk ke akun Anda.</p>
                         <button onclick="handleLogout()" class="btn" style="background: #ff523b; border: none; cursor: pointer;">Keluar (Logout)</button>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Area Riwayat Pesanan Saya (Tampil Saat Login) -->
+    <div class="small-container" id="orderHistorySection" style="display: none; margin-top: 30px; margin-bottom: 50px;">
+        <h2 class="title">Riwayat Pesanan Saya</h2>
+        <div style="background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
+            <table class="order-history-table">
+                <thead>
+                    <tr>
+                        <th>ID Transaksi</th>
+                        <th>Item Pesanan</th>
+                        <th>Metode Pembayaran</th>
+                        <th>Status</th>
+                        <th>Nomor Resi</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="userOrderHistoryBody">
+                    <!-- Data riwayat pesanan pelanggan dirender via JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal Form Ulasan & Rating Produk (Bisa Tambah & Edit) -->
+    <div id="userReviewModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeReviewModal()">&times;</span>
+            <h3 id="modalReviewTitle" style="color: #ff523b;">Beri Ulasan Produk</h3>
+            <p style="font-size: 14px; color: #555; margin-top: 5px;" id="reviewProductNameTarget">Produk: -</p>
+            
+            <div class="star-rating" id="userStarContainer">
+                <i class="fa fa-star active" onclick="setUserRating(1)"></i>
+                <i class="fa fa-star active" onclick="setUserRating(2)"></i>
+                <i class="fa fa-star active" onclick="setUserRating(3)"></i>
+                <i class="fa fa-star active" onclick="setUserRating(4)"></i>
+                <i class="fa fa-star active" onclick="setUserRating(5)"></i>
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <textarea id="userReviewText" rows="3" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;" placeholder="Bagaimana kualitas barang yang Anda terima?" required></textarea>
+            </div>
+            
+            <button id="submitReviewBtn" onclick="submitUserReview()" class="btn" style="width: 100%; margin: 0; cursor: pointer; border: none;">Kirim Ulasan & Rating</button>
         </div>
     </div>
 
@@ -143,7 +244,7 @@
         }
     </script>
 
-    <!-- JavaScript Handling Login, Registration, Password Reset & Logout State -->
+    <!-- JavaScript Handling Login, Registration, Password Reset, Logout State & Riwayat Pesanan -->
     <script>
         // Cek Status Login saat Halaman Dimuat
         window.addEventListener("DOMContentLoaded", checkLoginState);
@@ -154,17 +255,153 @@
             const authContainer = document.getElementById("authContainer");
             const loggedInContainer = document.getElementById("loggedInContainer");
             const displayUsername = document.getElementById("displayUsername");
+            const orderHistorySection = document.getElementById("orderHistorySection");
 
             if (userRole && currentUser) {
-                // Tampilkan container logout jika pengguna sudah login
+                // Tampilkan container profil & tabel riwayat jika pengguna sudah login
                 authContainer.style.display = "none";
                 loggedInContainer.style.display = "block";
                 displayUsername.textContent = currentUser;
+                orderHistorySection.style.display = "block";
+                renderUserOrderHistory();
             } else {
                 // Tampilkan form auth jika belum login
                 authContainer.style.display = "block";
                 loggedInContainer.style.display = "none";
+                orderHistorySection.style.display = "none";
             }
+        }
+
+        // Render Riwayat Pesanan Saya
+        function renderUserOrderHistory() {
+            const currentUser = localStorage.getItem("currentUser") || "";
+            const orders = JSON.parse(localStorage.getItem("adminOrders")) || [];
+            const reviews = JSON.parse(localStorage.getItem("adminReviews")) || [];
+            const tbody = document.getElementById("userOrderHistoryBody");
+            if (!tbody) return;
+
+            tbody.innerHTML = "";
+
+            // Filter transaksi milik user yang sedang login
+            const myOrders = orders.filter(o => o.customer && o.customer.toLowerCase() === currentUser.toLowerCase());
+
+            if (myOrders.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #777;">Belum ada riwayat pesanan.</td></tr>`;
+                return;
+            }
+
+            myOrders.forEach(o => {
+                const tr = document.createElement("tr");
+                const statusBadge = o.status === "Lunas" ? `<span class="badge-success">Lunas / Dikirim</span>` : `<span class="badge-warning">Diproses</span>`;
+                const resiText = o.resi ? `<strong>${o.resi}</strong>` : `<em>Dalam Proses Admin</em>`;
+                
+                // Cek apakah ulasan untuk transaksi ini sudah pernah dikirim oleh pengguna
+                const existingReview = reviews.find(r => r.trxId === o.id);
+
+                let actionBtn = "";
+                if (o.status === "Lunas" && o.resi) {
+                    if (existingReview) {
+                        // Jika sudah mengulas, ubah tombol menjadi 'Edit Ulasan'
+                        actionBtn = `<button onclick="openReviewModal('${o.id}', '${o.productName || 'Kaos Printed Red'}')" class="btn-action-edit">Edit Ulasan</button>`;
+                    } else {
+                        // Jika belum pernah mengulas, tampilkan tombol 'Beri Ulasan'
+                        actionBtn = `<button onclick="openReviewModal('${o.id}', '${o.productName || 'Kaos Printed Red'}')" class="btn-action">Beri Ulasan</button>`;
+                    }
+                } else {
+                    actionBtn = `<span style="font-size: 12px; color: #888;">Menunggu Pengiriman</span>`;
+                }
+
+                tr.innerHTML = `
+                    <td>#${o.id}</td>
+                    <td>${o.productName || 'Pesanan Produk'}</td>
+                    <td>${o.method}</td>
+                    <td>${statusBadge}</td>
+                    <td>${resiText}</td>
+                    <td>${actionBtn}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Variabel penampung rating yang dipilih & nama produk yang diulas
+        let activeReviewTrxId = "";
+        let activeProductName = "";
+        let selectedUserRating = 5;
+
+        function openReviewModal(trxId, prodName) {
+            activeReviewTrxId = trxId;
+            activeProductName = prodName;
+            document.getElementById("reviewProductNameTarget").textContent = "Produk: " + prodName;
+            
+            const reviews = JSON.parse(localStorage.getItem("adminReviews")) || [];
+            const existingReview = reviews.find(r => r.trxId === trxId);
+
+            if (existingReview) {
+                // Jika sudah ada ulasan (Mode Edit/Update)
+                document.getElementById("modalReviewTitle").textContent = "Edit Ulasan Produk";
+                document.getElementById("userReviewText").value = existingReview.review;
+                document.getElementById("submitReviewBtn").textContent = "Simpan Perubahan Ulasan";
+                setUserRating(existingReview.rating || 5);
+            } else {
+                // Jika ulasan baru (Mode Tambah Baru)
+                document.getElementById("modalReviewTitle").textContent = "Beri Ulasan Produk";
+                document.getElementById("userReviewText").value = "";
+                document.getElementById("submitReviewBtn").textContent = "Kirim Ulasan & Rating";
+                setUserRating(5);
+            }
+
+            document.getElementById("userReviewModal").style.display = "block";
+        }
+
+        function closeReviewModal() {
+            document.getElementById("userReviewModal").style.display = "none";
+        }
+
+        function setUserRating(rating) {
+            selectedUserRating = rating;
+            const stars = document.querySelectorAll("#userStarContainer .fa-star");
+            stars.forEach((star, idx) => {
+                if (idx < rating) {
+                    star.classList.add("active");
+                } else {
+                    star.classList.remove("active");
+                }
+            });
+        }
+
+        function submitUserReview() {
+            const reviewText = document.getElementById("userReviewText").value.trim();
+            if (!reviewText) {
+                alert("Harap tuliskan ulasan Anda terlebih dahulu.");
+                return;
+            }
+
+            const currentUser = localStorage.getItem("currentUser") || "Pelanggan";
+            let reviews = JSON.parse(localStorage.getItem("adminReviews")) || [];
+
+            // Pisahkan produk jika dalam satu transaksi ada banyak barang
+            const productList = activeProductName.split(",").map(p => p.replace(/\(x\d+\)/g, '').trim());
+
+            // Hapus ulasan lama berdasarkan trxId jika pengguna sedang melakukan update/edit
+            reviews = reviews.filter(r => r.trxId !== activeReviewTrxId);
+
+            // Masukkan ulasan baru / ulasan yang telah diperbarui
+            productList.forEach((prod, index) => {
+                reviews.unshift({
+                    id: Date.now() + index,
+                    trxId: activeReviewTrxId,
+                    customer: currentUser,
+                    product: prod,
+                    rating: selectedUserRating,
+                    review: reviewText,
+                    status: "Ditampilkan"
+                });
+            });
+
+            localStorage.setItem("adminReviews", JSON.stringify(reviews));
+            alert("Ulasan & rating Anda telah berhasil disimpan!");
+            closeReviewModal();
+            renderUserOrderHistory(); // Refresh tampilan tombol tabel
         }
 
         // Fungsi pendaftaran akun baru
@@ -174,31 +411,26 @@
             const email = document.getElementById("regEmail").value.trim().toLowerCase();
             const password = document.getElementById("regPass").value.trim();
 
-            // Validasi format email sederhana
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 alert("Format email tidak valid! Harap masukkan alamat email yang benar.");
                 return;
             }
 
-            // Ambil daftar pengguna yang tersimpan di localStorage
             let users = JSON.parse(localStorage.getItem("registeredUsers")) || [];
 
-            // Cek apakah username sudah terdaftar
             const usernameExists = users.some(u => u.username.toLowerCase() === username.toLowerCase());
             if (usernameExists || username.toLowerCase() === "admin") {
                 alert("Nama pengguna sudah digunakan! Silakan gunakan nama pengguna lain.");
                 return;
             }
 
-            // Cek apakah email sudah terdaftar
             const emailExists = users.some(u => u.email.toLowerCase() === email);
             if (emailExists) {
                 alert("Alamat email sudah terdaftar! Silakan gunakan email lain atau masuk dengan akun tersebut.");
                 return;
             }
 
-            // Simpan akun baru
             users.push({ username, email, password });
             localStorage.setItem("registeredUsers", JSON.stringify(users));
 
@@ -213,7 +445,6 @@
             const loginInput = document.getElementById("loginUser").value.trim().toLowerCase();
             const password = document.getElementById("loginPass").value.trim();
 
-            // Cek Login khusus Admin
             if (loginInput === "admin") {
                 if (password === "admin") {
                     localStorage.setItem("userRole", "admin");
@@ -226,14 +457,10 @@
                 return;
             }
 
-            // Ambil data akun dari localStorage
             let users = JSON.parse(localStorage.getItem("registeredUsers")) || [];
-            
-            // Cari pengguna berdasarkan Nama Pengguna atau Email
             const foundUser = users.find(u => u.username.toLowerCase() === loginInput || u.email.toLowerCase() === loginInput);
 
             if (foundUser) {
-                // Verifikasi Kata Sandi
                 if (foundUser.password === password) {
                     localStorage.setItem("userRole", "customer");
                     localStorage.setItem("currentUser", foundUser.username);
@@ -260,8 +487,6 @@
             }
 
             let users = JSON.parse(localStorage.getItem("registeredUsers")) || [];
-            
-            // Cari akun berdasarkan nama pengguna atau email
             const userIndex = users.findIndex(u => 
                 u.username.toLowerCase() === cleanInput || u.email.toLowerCase() === cleanInput
             );
@@ -290,7 +515,6 @@
             }
         }
     </script>
-
 </body>
 
 </html>

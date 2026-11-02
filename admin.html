@@ -9,144 +9,28 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
-        html {
-            scroll-behavior: smooth;
-        }
-        .admin-dashboard {
-            margin-top: 30px;
-            margin-bottom: 50px;
-        }
-        .admin-cards {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-bottom: 30px;
-        }
-        .admin-card {
-            flex: 1;
-            min-width: 200px;
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-        .admin-card h3 {
-            color: #ff523b;
-            margin-top: 10px;
-            font-size: 18px;
-        }
-        .admin-card p {
-            font-size: 14px;
-            color: #555;
-            margin-top: 5px;
-        }
-        .admin-section {
-            background: #fff;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
-        }
-        .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        .admin-table th, .admin-table td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-            text-align: left;
-            font-size: 14px;
-        }
-        .admin-table th {
-            background: #ff523b;
-            color: #fff;
-        }
-        .badge-success {
-            background: #28a745;
-            color: white;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-        .badge-warning {
-            background: #ffc107;
-            color: #333;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-        .badge-danger {
-            background: #dc3545;
-            color: white;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-        .btn-action {
-            padding: 5px 10px;
-            background: #ff523b;
-            color: white;
-            border-radius: 4px;
-            text-decoration: none;
-            font-size: 12px;
-            border: none;
-            cursor: pointer;
-        }
-
-        /* Styling Modal Form CRUD */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.5);
-        }
-        .modal-content {
-            background-color: #fff;
-            margin: 8% auto;
-            padding: 25px;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            position: relative;
-        }
-        .close-btn {
-            position: absolute;
-            right: 20px;
-            top: 15px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #aaa;
-            cursor: pointer;
-        }
-        .close-btn:hover {
-            color: #ff523b;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            font-size: 14px;
-            margin-bottom: 5px;
-            color: #333;
-            font-weight: 500;
-        }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-            box-sizing: border-box;
-        }
+        html { scroll-behavior: smooth; }
+        .admin-dashboard { margin-top: 30px; margin-bottom: 50px; }
+        .admin-cards { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 30px; }
+        .admin-card { flex: 1; min-width: 200px; background: #f9f9f9; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); text-align: center; }
+        .admin-card h3 { color: #ff523b; margin-top: 10px; font-size: 18px; }
+        .admin-card p { font-size: 14px; color: #555; margin-top: 5px; }
+        .admin-section { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .admin-table th, .admin-table td { padding: 12px; border-bottom: 1px solid #ddd; text-align: left; font-size: 14px; }
+        .admin-table th { background: #ff523b; color: #fff; }
+        .badge-success { background: #28a745; color: white; padding: 3px 8px; border-radius: 4px; font-size: 12px; }
+        .badge-warning { background: #ffc107; color: #333; padding: 3px 8px; border-radius: 4px; font-size: 12px; }
+        .btn-action { padding: 5px 10px; background: #ff523b; color: white; border-radius: 4px; text-decoration: none; font-size: 12px; border: none; cursor: pointer; }
+        
+        /* Modal Styling */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); }
+        .modal-content { background-color: #fff; margin: 5% auto; padding: 25px; border-radius: 8px; width: 90%; max-width: 500px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); position: relative; }
+        .close-btn { position: absolute; right: 20px; top: 15px; font-size: 24px; font-weight: bold; color: #aaa; cursor: pointer; }
+        .close-btn:hover { color: #ff523b; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 14px; margin-bottom: 5px; color: #333; font-weight: 500; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; box-sizing: border-box; }
     </style>
 </head>
 
@@ -169,11 +53,10 @@
                 <img src="images/menu.png" class="menu-icon" onclick="menutoggle()" alt="Menu Toggle">
             </div>
             
-            <!-- Hero / Admin Title Section -->
             <div class="row" style="margin-top: 20px; padding-bottom: 30px;">
                 <div class="col-2">
                     <h1>Panel Kelola Admin<br></h1>
-                    <p>Manajemen entitas e-commerce: Katalog & stok produk, verifikasi pesanan, pembayaran virtual account, ulasan pelanggan, serta laporan omzet bulanan.</p>
+                    <p>Manajemen entitas e-commerce: Katalog & stok produk, verifikasi pesanan, pembayaran virtual account, serta laporan omzet bulanan.</p>
                 </div>
                 <div class="col-2" style="text-align: center;">
                     <i class="fa fa-user-secret fa-5x" style="color: #ff523b;"></i>
@@ -182,7 +65,7 @@
         </div>
     </div>
 
-    <!-- FITUR ADMIN 1: Ringkasan Entitas & Omzet Bulanan -->
+    <!-- Ringkasan Entitas & Omzet Bulanan -->
     <div class="small-container admin-dashboard">
         <h2 class="title">Ringkasan Sistem</h2>
         <div class="admin-cards">
@@ -208,7 +91,7 @@
             </div>
         </div>
 
-        <!-- FITUR ADMIN 2: Kelola Katalog & Stok Produk (CRUD) -->
+        <!-- Kelola Katalog & Stok Produk (CRUD) -->
         <div class="admin-section" id="kelola-produk">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
                 <h3>Katalog & Stok Produk</h3>
@@ -227,12 +110,12 @@
                     </tr>
                 </thead>
                 <tbody id="productTableBody">
-                    <!-- Data Produk Dirender Secara Dinamis via JavaScript -->
+                    <!-- Data Produk via JS -->
                 </tbody>
             </table>
         </div>
 
-        <!-- FITUR ADMIN 3: Pesanan, Konfirmasi Pembayaran & Nomor Resi -->
+        <!-- Pesanan & Konfirmasi Pembayaran -->
         <div class="admin-section">
             <h3>Pesanan Masuk & Verifikasi Pembayaran</h3>
             <table class="admin-table">
@@ -247,33 +130,13 @@
                     </tr>
                 </thead>
                 <tbody id="orderTableBody">
-                    <!-- Data Pesanan Dirender Secara Dinamis via JavaScript -->
-                </tbody>
-            </table>
-        </div>
-
-        <!-- FITUR ADMIN 4: Ulasan / Rating Pelanggan -->
-        <div class="admin-section">
-            <h3>Moderasi Ulasan & Rating Pelanggan</h3>
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>Pelanggan</th>
-                        <th>Produk</th>
-                        <th>Rating</th>
-                        <th>Ulasan / Review</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="reviewTableBody">
-                    <!-- Data Ulasan Dirender Secara Dinamis via JavaScript -->
+                    <!-- Data Pesanan via JS -->
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- Modal Form Tambah / Edit Produk (CRUD) -->
+    <!-- Modal Form Tambah / Edit Produk -->
     <div id="productModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeProductModal()">&times;</span>
@@ -301,8 +164,19 @@
                     <input type="number" id="prodStock" required placeholder="Contoh: 15">
                 </div>
                 <div class="form-group">
-                    <label>Path/URL Gambar</label>
-                    <input type="text" id="prodImg" required placeholder="images/product-1.jpg">
+                    <label>Varian Ukuran (Kosongkan jika tidak ada ukuran)</label>
+                    <input type="text" id="prodSizes" placeholder="Contoh: S, M, L, XL atau 39, 40, 41 (Biarkan kosong jika tidak ada)">
+                </div>
+                <div class="form-group">
+                    <label>Deskripsi Produk</label>
+                    <textarea id="prodDesc" rows="3" placeholder="Tuliskan detail/deskripsi produk di sini..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Upload Gambar Produk</label>
+                    <input type="file" id="prodImgFile" accept="image/*" onchange="previewImageFile(event)">
+                    <div id="imagePreviewContainer" style="margin-top: 10px;">
+                        <img id="imgPreview" src="" alt="Preview Gambar" style="max-width: 80px; max-height: 80px; border-radius: 4px; display: none;">
+                    </div>
                 </div>
                 <div style="display: flex; gap: 10px; margin-top: 20px;">
                     <button type="submit" class="btn" style="flex: 1; margin: 0; padding: 10px; cursor: pointer;">Simpan Produk</button>
@@ -312,7 +186,7 @@
         </div>
     </div>
 
-    <!-- Modal Input Resi / Verifikasi Pesanan -->
+    <!-- Modal Input Resi -->
     <div id="resiModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeResiModal()">&times;</span>
@@ -374,19 +248,14 @@
         </div>
     </div>
 
-    <!-- JavaScript Navigation & Full Engine -->
+    <!-- JavaScript Engine -->
     <script>
         var MenuItems = document.getElementById("MenuItems");
         MenuItems.style.maxHeight = "0px";
         function menutoggle() {
-            if (MenuItems.style.maxHeight == "0px") {
-                MenuItems.style.maxHeight = "200px";
-            } else {
-                MenuItems.style.maxHeight = "0px";
-            }
+            MenuItems.style.maxHeight = (MenuItems.style.maxHeight == "0px") ? "200px" : "0px";
         }
 
-        // Logout Admin
         function logoutAdmin() {
             localStorage.removeItem("userRole");
             localStorage.removeItem("currentUser");
@@ -394,20 +263,35 @@
             window.location.href = "account.html";
         }
 
-        // 1. MANAJEMEN KATALOG & STOK PRODUK (CRUD) - LENGKAP 12 PRODUK
+        let currentImageBase64 = "";
+        function previewImageFile(e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById("imgPreview");
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    currentImageBase64 = event.target.result;
+                    preview.src = currentImageBase64;
+                    preview.style.display = "block";
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // 1. MANAJEMEN KATALOG & STOK PRODUK
         const defaultAdminProducts = [
-            { id: "PRD-1", name: "Kaos Printed Red", category: "Pakaian", price: 150000, stock: 15, img: "images/product-1.jpg" },
-            { id: "PRD-2", name: "Sepatu Lari Black HRX", category: "Sepatu", price: 250000, stock: 8, img: "images/product-2.jpg" },
-            { id: "PRD-3", name: "Celana Sweatpants Grey", category: "Pakaian", price: 350000, stock: 20, img: "images/product-3.jpg" },
-            { id: "PRD-4", name: "Kaos Polo Navy Puma", category: "Pakaian", price: 420000, stock: 5, img: "images/product-4.jpg" },
-            { id: "PRD-5", name: "Sepatu Casual High Top", category: "Sepatu", price: 280000, stock: 12, img: "images/product-5.jpg" },
-            { id: "PRD-6", name: "Kaos Polos Black", category: "Pakaian", price: 95000, stock: 30, img: "images/product-6.jpg" },
-            { id: "PRD-7", name: "Kaos Kaki Sport 3 in 1", category: "Aksesoris", price: 45000, stock: 50, img: "images/product-7.jpg" },
-            { id: "PRD-8", name: "Jam Tangan Analog Black", category: "Aksesoris", price: 490000, stock: 10, img: "images/product-8.jpg" },
-            { id: "PRD-9", name: "Jam Tangan Sport Roadster", category: "Aksesoris", price: 210000, stock: 15, img: "images/product-9.jpg" },
-            { id: "PRD-10", name: "Sepatu Running Black Red", category: "Sepatu", price: 530000, stock: 6, img: "images/product-10.jpg" },
-            { id: "PRD-11", name: "Sepatu Casual Grey", category: "Sepatu", price: 310000, stock: 18, img: "images/product-11.jpg" },
-            { id: "PRD-12", name: "Celana Jogger Black Nike", category: "Pakaian", price: 175000, stock: 25, img: "images/product-12.jpg" }
+            { id: "PRD-1", name: "Kaos Printed Red", category: "Pakaian", price: 150000, stock: 15, img: "images/product-1.jpg", sizes: "S, M, L, XL", desc: "Kaos kasual berbahan nyaman." },
+            { id: "PRD-2", name: "Sepatu Lari Black HRX", category: "Sepatu", price: 250000, stock: 8, img: "images/product-2.jpg", sizes: "39, 40, 41, 42", desc: "Sepatu lari berbahan ringan." },
+            { id: "PRD-3", name: "Celana Sweatpants Grey", category: "Pakaian", price: 350000, stock: 20, img: "images/product-3.jpg", sizes: "M, L, XL", desc: "Sweatpants berkualitas tinggi." },
+            { id: "PRD-4", name: "Kaos Polo Navy Puma", category: "Pakaian", price: 420000, stock: 5, img: "images/product-4.jpg", sizes: "S, M, L", desc: "Kaos polo kasual sporty." },
+            { id: "PRD-5", name: "Sepatu Casual High Top", category: "Sepatu", price: 280000, stock: 12, img: "images/product-5.jpg", sizes: "40, 41, 42", desc: "Sepatu santai bertipe high top." },
+            { id: "PRD-6", name: "Kaos Polos Black", category: "Pakaian", price: 95000, stock: 30, img: "images/product-6.jpg", sizes: "S, M, L, XL", desc: "Kaos polos katun combed." },
+            { id: "PRD-7", name: "Kaos Kaki Sport 3 in 1", category: "Aksesoris", price: 45000, stock: 50, img: "images/product-7.jpg", sizes: "All Size", desc: "Paket 3 pasang kaos kaki olahraga." },
+            { id: "PRD-8", name: "Jam Tangan Analog Black", category: "Aksesoris", price: 490000, stock: 10, img: "images/product-8.jpg", sizes: "All Size", desc: "Jam tangan analog maskulin." },
+            { id: "PRD-9", name: "Jam Tangan Sport Roadster", category: "Aksesoris", price: 210000, stock: 15, img: "images/product-9.jpg", sizes: "All Size", desc: "Jam tangan sporty berdaya tahan tinggi." },
+            { id: "PRD-10", name: "Sepatu Running Black Red", category: "Sepatu", price: 530000, stock: 6, img: "images/product-10.jpg", sizes: "39, 40, 41", desc: "Sepatu lari performa tinggi." },
+            { id: "PRD-11", name: "Sepatu Casual Grey", category: "Sepatu", price: 310000, stock: 18, img: "images/product-11.jpg", sizes: "40, 41, 42", desc: "Sepatu slip-on kasual." },
+            { id: "PRD-12", name: "Celana Jogger Black Nike", category: "Pakaian", price: 175000, stock: 25, img: "images/product-12.jpg", sizes: "M, L, XL", desc: "Celana jogger elastis." }
         ];
 
         function getProducts() {
@@ -426,10 +310,8 @@
         function renderProducts() {
             const products = getProducts();
             const tbody = document.getElementById("productTableBody");
-            const countText = document.getElementById("totalProductCount");
-            
+            document.getElementById("totalProductCount").textContent = `${products.length} Item Produk`;
             tbody.innerHTML = "";
-            countText.textContent = `${products.length} Item Produk`;
 
             products.forEach(p => {
                 const tr = document.createElement("tr");
@@ -453,6 +335,9 @@
             document.getElementById("modalTitle").textContent = "Tambah Produk Baru";
             document.getElementById("productForm").reset();
             document.getElementById("editProductId").value = "";
+            document.getElementById("prodSizes").value = "";
+            currentImageBase64 = "";
+            document.getElementById("imgPreview").style.display = "none";
             document.getElementById("productModal").style.display = "block";
         }
 
@@ -461,8 +346,7 @@
         }
 
         function openEditModal(id) {
-            const products = getProducts();
-            const prod = products.find(p => p.id === id);
+            const prod = getProducts().find(p => String(p.id) === String(id));
             if (!prod) return;
 
             document.getElementById("modalTitle").textContent = `Edit Produk #${prod.id}`;
@@ -471,8 +355,17 @@
             document.getElementById("prodCategory").value = prod.category;
             document.getElementById("prodPrice").value = prod.price;
             document.getElementById("prodStock").value = prod.stock;
-            document.getElementById("prodImg").value = prod.img;
-
+            document.getElementById("prodSizes").value = (prod.sizes === "No Size" || prod.sizes === "Tidak Ada Ukuran") ? "" : (prod.sizes || "");
+            document.getElementById("prodDesc").value = prod.desc || "";
+            
+            currentImageBase64 = prod.img;
+            const preview = document.getElementById("imgPreview");
+            if (currentImageBase64) {
+                preview.src = currentImageBase64;
+                preview.style.display = "block";
+            } else {
+                preview.style.display = "none";
+            }
             document.getElementById("productModal").style.display = "block";
         }
 
@@ -480,23 +373,30 @@
             e.preventDefault();
             let products = getProducts();
             const editId = document.getElementById("editProductId").value;
-
             const name = document.getElementById("prodName").value.trim();
             const category = document.getElementById("prodCategory").value;
             const price = parseInt(document.getElementById("prodPrice").value);
             const stock = parseInt(document.getElementById("prodStock").value);
-            const img = document.getElementById("prodImg").value.trim();
+            let sizes = document.getElementById("prodSizes").value.trim();
+            
+            // Jika dikosongkan atau diisi "-", set secara pasti sebagai "No Size"
+            if (!sizes || sizes === "-") {
+                sizes = "No Size";
+            }
+
+            const desc = document.getElementById("prodDesc").value.trim();
+            const img = currentImageBase64 || "images/product-1.jpg";
 
             if (editId) {
-                const index = products.findIndex(p => p.id === editId);
+                const index = products.findIndex(p => String(p.id) === String(editId));
                 if (index !== -1) {
-                    products[index] = { id: editId, name, category, price, stock, img };
+                    products[index] = { id: editId, name, category, price, stock, img, sizes, desc };
                     alert(`Produk #${editId} berhasil diperbarui!`);
                 }
             } else {
-                const nextNum = products.length > 0 ? Math.max(...products.map(p => parseInt(p.id.replace("PRD-", "")) || 0)) + 1 : 1;
+                const nextNum = products.length > 0 ? Math.max(...products.map(p => parseInt(String(p.id).replace("PRD-", "")) || 0)) + 1 : 1;
                 const newId = `PRD-${nextNum}`;
-                products.push({ id: newId, name, category, price, stock, img });
+                products.push({ id: newId, name, category, price, stock, img, sizes, desc });
                 alert(`Produk baru #${newId} berhasil ditambahkan!`);
             }
 
@@ -507,8 +407,7 @@
 
         function deleteProduct(id) {
             if (confirm(`Apakah Anda yakin ingin menghapus produk #${id}?`)) {
-                let products = getProducts();
-                products = products.filter(p => p.id !== id);
+                let products = getProducts().filter(p => String(p.id) !== String(id));
                 localStorage.setItem("adminProducts", JSON.stringify(products));
                 alert(`Produk #${id} berhasil dihapus.`);
                 renderProducts();
@@ -533,20 +432,14 @@
         function renderOrders() {
             const orders = getOrders();
             const tbody = document.getElementById("orderTableBody");
-            const countText = document.getElementById("totalOrderCount");
+            document.getElementById("totalOrderCount").textContent = `${orders.length} Transaksi`;
             tbody.innerHTML = "";
-            if (countText) countText.textContent = `${orders.length} Transaksi`;
 
             orders.forEach(o => {
                 const tr = document.createElement("tr");
-                const statusBadge = o.status === "Lunas" 
-                    ? `<span class="badge-success">Lunas</span>` 
-                    : `<span class="badge-warning">Menunggu Konfirmasi</span>`;
-                
+                const statusBadge = o.status === "Lunas" ? `<span class="badge-success">Lunas</span>` : `<span class="badge-warning">Menunggu Konfirmasi</span>`;
                 const resiText = o.resi ? `<strong>${o.resi}</strong>` : `<em>Belum Diinput</em>`;
-                const actionBtn = o.resi 
-                    ? `<button onclick="viewOrderDetail('${o.id}')" class="btn-action">Detail</button>` 
-                    : `<button onclick="openResiModal('${o.id}')" class="btn-action">Input Resi</button>`;
+                const actionBtn = o.resi ? `<button onclick="viewOrderDetail('${o.id}')" class="btn-action">Detail</button>` : `<button onclick="openResiModal('${o.id}')" class="btn-action">Input Resi</button>`;
 
                 tr.innerHTML = `
                     <td>#${o.id}</td>
@@ -575,77 +468,22 @@
             e.preventDefault();
             const id = document.getElementById("resiTrxId").value;
             const resiNum = document.getElementById("inputResiNum").value.trim();
-
             let orders = getOrders();
             const index = orders.findIndex(o => o.id === id);
             if (index !== -1) {
                 orders[index].resi = resiNum;
                 orders[index].status = "Lunas";
                 localStorage.setItem("adminOrders", JSON.stringify(orders));
-                alert(`Nomor resi ${resiNum} berhasil diinput. Pembayaran otomatis diverifikasi Lunas!`);
+                alert(`Nomor resi ${resiNum} berhasil diinput!`);
             }
             closeResiModal();
             renderOrders();
         }
 
         function viewOrderDetail(id) {
-            const orders = getOrders();
-            const o = orders.find(item => item.id === id);
+            const o = getOrders().find(item => item.id === id);
             if (o) {
                 alert(`DETAIL TRANSAKSI:\n\nID Transaksi: #${o.id}\nPelanggan: ${o.customer}\nPembayaran: ${o.method}\nStatus: ${o.status}\nNomor Resi: ${o.resi}`);
-            }
-        }
-
-        // 3. MODERASI ULASAN
-        const defaultReviews = [
-            { id: 1, customer: "Sean Parker", product: "Kaos Printed Red", rating: 5.0, review: "Proses pemesanan sangat cepat, checkout dengan perhitungan total otomatis sangat membantu!", status: "Ditampilkan" },
-            { id: 2, customer: "Mike Smith", product: "Sepatu Lari Black HRX", rating: 5.0, review: "Konfirmasi pembayaran via gateway bekerja secara instan. Nomor resi langsung muncul.", status: "Ditampilkan" }
-        ];
-
-        function getReviews() {
-            const stored = localStorage.getItem("adminReviews");
-            if (!stored) {
-                localStorage.setItem("adminReviews", JSON.stringify(defaultReviews));
-                return defaultReviews;
-            }
-            return JSON.parse(stored);
-        }
-
-        function renderReviews() {
-            const reviews = getReviews();
-            const tbody = document.getElementById("reviewTableBody");
-            tbody.innerHTML = "";
-
-            reviews.forEach(r => {
-                const tr = document.createElement("tr");
-                const statusBadge = r.status === "Ditampilkan" 
-                    ? `<span class="badge-success">Ditampilkan</span>` 
-                    : `<span class="badge-danger">Disembunyikan</span>`;
-                
-                const toggleBtnText = r.status === "Ditampilkan" ? "Sembunyikan" : "Tampilkan";
-                const toggleBtnBg = r.status === "Ditampilkan" ? "background: #333;" : "background: #28a745;";
-
-                tr.innerHTML = `
-                    <td>${r.customer}</td>
-                    <td>${r.product}</td>
-                    <td><i class="fa fa-star" style="color:#ff523b;"></i> ${r.rating.toFixed(1)}</td>
-                    <td>${r.review}</td>
-                    <td>${statusBadge}</td>
-                    <td>
-                        <button onclick="toggleReviewStatus(${r.id})" class="btn-action" style="${toggleBtnBg}">${toggleBtnText}</button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function toggleReviewStatus(id) {
-            let reviews = getReviews();
-            const index = reviews.findIndex(r => r.id === id);
-            if (index !== -1) {
-                reviews[index].status = reviews[index].status === "Ditampilkan" ? "Disembunyikan" : "Ditampilkan";
-                localStorage.setItem("adminReviews", JSON.stringify(reviews));
-                renderReviews();
             }
         }
 
@@ -653,10 +491,8 @@
         window.addEventListener("DOMContentLoaded", () => {
             renderProducts();
             renderOrders();
-            renderReviews();
         });
     </script>
-
 </body>
 
 </html>
